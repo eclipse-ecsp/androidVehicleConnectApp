@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104347266266",
+    "project_id": "vehicle-connect-4b64f",
+    "storage_bucket": "vehicle-connect-4b64f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104347266266:android:a6d53d6921e6443bb289e3",
+        "android_client_info": {
+          "package_name": "com.harman.vehicleconnects"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk0d8OL-wBDpzGYdbjjsJHgTQi02loHEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

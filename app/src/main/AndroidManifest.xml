@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <application android:name=".ui.view.activities.App"
+        tools:replace="android:theme"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat"
+        tools:targetApi="31">
+        <activity
+            android:name="com.harman.vehicleconnects.ui.view.activities.LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.harman.vehicleconnects.ui.view.activities.DeviceAssociationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.harman.vehicleconnects.ui.view.activities.DashboardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.harman.vehicleconnects.ui.view.activities.VehicleProfileActivity"
+            android:screenOrientation="portrait"/>
+
+        <service
+            android:name=".helper.FcmNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action
+                    android:name="com.google.firebase.MESSAGING_EVENT">
+                </action>
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

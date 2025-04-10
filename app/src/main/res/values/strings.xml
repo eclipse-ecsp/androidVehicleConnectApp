@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Vehicle Connect App</string>
+    <string name="device_association_text">Device Association</string>
+    <string name="install_device_text">Install the Device</string>
+    <string name="install_device_sub_text">Make sure your vehicle is turned OFF and plug the device into the vehicle\'s OBDII port and power on the device by turning on your vehicle. </string>
+    <string name="find_obdii_port_text">HELP ME FIND OBDII PORT IN MY VEHICLE</string>
+    <string name="next_btn_text">Next</string>
+    <string name="add_device_btn_text">Add Device</string>
+    <string name="enter_imei_text">Enter IMEI</string>
+    <string name="enter_imei_sub_text">The IMEI number can be found on the back side of your device, or on the card included inside the packaging box.</string>
+    <string name="sign_in_text">SIGN IN</string>
+    <string name="sign_up_text">SIGN UP</string>
+    <string name="remote_control_text">Remote Control</string>
+    <string name="settings_text">Settings</string>
+    <string name="vehicle_profile_text">Vehicle Profile</string>
+    <string name="edit_nickname_text">Edit Nickname</string>
+    <string name="alarm_confirm_activation_text">Confirm alarm activation?</string>
+    <string name="alarm_confirm_deactivation_text">Confirm alarm deactivation?</string>
+    <string name="door_unlock_confirm_text">Confirm doors unlock?</string>
+    <string name="door_lock_confirm_text">Confirm doors lock?</string>
+    <string name="engin_start_confirm_text">Confirm engine start?</string>
+    <string name="engin_stop_confirm_text">Confirm engine stop?</string>
+    <string name="trunk_opening_text">Confirm trunk opening?</string>
+    <string name="trunk_closing_text">Confirm trunk closing?</string>
+    <string name="sign_out_sub_text">All your information will be stored in the cloud. You would be able to sign back in anytime.</string>
+    <string name="sign_out_text">Sign Out</string>
+    <string name="notification_text">Notification</string>
+    <string name="save_text">Save</string>
+    <string name="remove_vehicle_text">Remove Vehicle</string>
+    <string name="remove_vehicle_sub_text">Remove all data received from the vehicle</string>
+</resources>
