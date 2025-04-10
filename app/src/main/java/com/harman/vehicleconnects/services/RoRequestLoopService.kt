@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.services
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -18,7 +33,6 @@ import com.harman.vehicleconnects.helper.toastError
 import com.harman.vehicleconnects.models.dataclass.RemoteOperationItem
 import com.harman.vehicleconnects.models.viewmodels.RemoteOperationVM
 import com.harman.vehicleconnects.repository.DashboardRepository
-import com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose.setStateIcon
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,28 +41,17 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * Copyright (c) 2023-24 Harman International
+ * RoRequestLoopService class is to perform the RO related UI logic
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
+ * @property remoteOperationVM view model object of [RemoteOperationVM]
+ * @property remoteOperationService object of [RemoteOperationService]
  */
 class RoRequestLoopService(
     private val remoteOperationVM: RemoteOperationVM,
-    private val remoteOperationService: RemoteOperationService
+    private val remoteOperationService: RemoteOperationService,
 ) {
-
     private var checkRoRequestTimer: Job? = null
+
     fun roRequestStatusCallTimer(
         activity: Activity,
         userId: String,
@@ -60,33 +63,33 @@ class RoRequestLoopService(
         notifyRoUpdate: MutableState<Int>,
         isProgressBarLoading: MutableState<Boolean>?,
     ) {
-        checkRoRequestTimer = CoroutineScope(Dispatchers.Main).launch {
-            var count = 0
-            while (isActive) {
-                if (count <= 50) {
-                    count += 1
-                    dashboardRepository.checkRoRequestStatus(userId, vehicleId, roRequestId)
-                        .observe(lifecycleOwner) { roEventHistoryResponse ->
-                            updateRemoteUI(
-                                activity, roEventHistoryResponse,isProgressBarLoading,
-                                lazyStaggeredGridList, notifyRoUpdate
-                            )
-                        }
-                    delay(10000)
-                } else {
-                    cancelJob()
+        checkRoRequestTimer =
+            CoroutineScope(Dispatchers.Main).launch {
+                var count = 0
+                while (isActive) {
+                    if (count <= 50) {
+                        count += 1
+                        dashboardRepository.checkRoRequestStatus(userId, vehicleId, roRequestId)
+                            .observe(lifecycleOwner) { roEventHistoryResponse ->
+                                updateRemoteUI(
+                                    activity, roEventHistoryResponse, isProgressBarLoading,
+                                    lazyStaggeredGridList, notifyRoUpdate,
+                                )
+                            }
+                        delay(10000)
+                    } else {
+                        cancelJob()
+                    }
                 }
             }
-        }
     }
-
 
     private fun updateRemoteUI(
         activity: Activity,
         roEventHistoryResponse: CustomMessage<RoEventHistoryResponse>,
         isProgressBarLoading: MutableState<Boolean>?,
         lazyStaggeredGridList: MutableState<ArrayList<RemoteOperationItem>>?,
-        notifyRoUpdate: MutableState<Int>
+        notifyRoUpdate: MutableState<Int>,
     ) {
         isProgressBarLoading?.value = false
         if (roEventHistoryResponse.status.requestStatus && roEventHistoryResponse.response != null) {
@@ -97,7 +100,7 @@ class RoRequestLoopService(
                         remoteOperationService.updateGridItem(
                             response,
                             lazyStaggeredGridList?.value,
-                            activity
+                            activity,
                         )
                     if (finalList != null) {
                         lazyStaggeredGridList?.value = finalList
@@ -114,7 +117,7 @@ class RoRequestLoopService(
                             remoteOperationService.updateGridItem(
                                 response,
                                 lazyStaggeredGridList?.value,
-                                activity
+                                activity,
                             )
                         if (finalList != null) {
                             lazyStaggeredGridList?.value = finalList
@@ -135,11 +138,12 @@ class RoRequestLoopService(
                 }
 
                 AppConstants.TTL_EXPIRED, AppConstants.PROCESSED_FAILED -> {
-                    val finalList = remoteOperationService.updateGridItem(
-                        response,
-                        lazyStaggeredGridList?.value,
-                        activity
-                    )
+                    val finalList =
+                        remoteOperationService.updateGridItem(
+                            response,
+                            lazyStaggeredGridList?.value,
+                            activity,
+                        )
                     if (finalList != null) {
                         lazyStaggeredGridList?.value = finalList
                         notifyRoUpdate.value = notifyRoUpdate.value + 1
@@ -148,12 +152,13 @@ class RoRequestLoopService(
                     toastError(activity, "${getEventType(response.roEvents.eventID)} Remote operation failed")
                 }
             }
-        } else
+        } else {
             toastError(activity, roEventHistoryResponse.error?.message.toString())
+        }
     }
 
-    private fun getEventType(eventId: String?): String{
-        return when(eventId){
+    private fun getEventType(eventId: String?): String  {
+        return when (eventId) {
             AppConstants.WINDOW_EVENT_ID -> WINDOWS
             AppConstants.LIGHTS_EVENT_ID -> LIGHT
             AppConstants.ALARM_EVENT_ID -> ALARM

@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,23 +40,10 @@ import com.harman.vehicleconnects.helper.AppConstants.PARTIAL_OPENED
 import com.harman.vehicleconnects.ui.theme.Black
 import com.harman.vehicleconnects.ui.theme.LightBlue
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * WindowsAndLightStateOptionCompose contains RO's Windows and Light state related compose functions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
-
+ */
 @Composable
 fun WindowsAndLightStateCompose(
     roType: String,
@@ -55,11 +57,12 @@ fun WindowsAndLightStateCompose(
     val thirdText = if (roType == AppConstants.WINDOWS) AppConstants.OPEN else AppConstants.ON
 
     Row(
-        modifier = Modifier
-            .height(300.dp)
-            .fillMaxWidth()
-            .padding(top = 20.dp, start = 10.dp, end = 10.dp),
-        horizontalArrangement = Arrangement.SpaceAround
+        modifier =
+            Modifier
+                .height(300.dp)
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 10.dp, end = 10.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
     ) {
         FirstItem(
             roType = roType,
@@ -67,147 +70,157 @@ fun WindowsAndLightStateCompose(
             selectedState = selectedState,
             thirdItemColor = thirdItemColor,
             secondItemColor = secondItemColor,
-            firstItemColor = firstItemColor
+            firstItemColor = firstItemColor,
         )
-        if (roType == AppConstants.WINDOWS)
+        if (roType == AppConstants.WINDOWS) {
             SecondItem(
                 roType = roType,
                 title = secText,
                 selectedState = selectedState,
                 thirdItemColor = thirdItemColor,
                 secondItemColor = secondItemColor,
-                firstItemColor = firstItemColor
+                firstItemColor = firstItemColor,
             )
+        }
         ThirdItem(
             roType = roType,
             title = thirdText,
             selectedState = selectedState,
             thirdItemColor = thirdItemColor,
             secondItemColor = secondItemColor,
-            firstItemColor = firstItemColor
+            firstItemColor = firstItemColor,
         )
     }
 }
 
 @Composable
 fun FirstItem(
-    roType: String, title: String,
+    roType: String,
+    title: String,
     selectedState: MutableState<Pair<String, Int>>,
     thirdItemColor: MutableState<Boolean>,
     secondItemColor: MutableState<Boolean>,
-    firstItemColor: MutableState<Boolean>
+    firstItemColor: MutableState<Boolean>,
 ) {
     val status = if (roType == AppConstants.WINDOWS) AppConstants.CLOSED else AppConstants.OFF
     val icon =
         if (roType == AppConstants.WINDOWS) R.drawable.ic_windows_closed else R.drawable.ic_lights_off
     Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .wrapContentSize()
-            .clickable {
-                firstItemColor.value = true
-                secondItemColor.value = false
-                thirdItemColor.value = false
-                selectedState.value = Pair(status, icon)
-
-            }.testTag("first_item_click_action_tag"),
+        modifier =
+            Modifier
+                .padding(16.dp)
+                .wrapContentSize()
+                .clickable {
+                    firstItemColor.value = true
+                    secondItemColor.value = false
+                    thirdItemColor.value = false
+                    selectedState.value = Pair(status, icon)
+                }.testTag("first_item_click_action_tag"),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         val color =
             if (selectedState.value.first == status || firstItemColor.value) LightBlue else Black
         Icon(
             imageVector = ImageVector.vectorResource(icon),
             contentDescription = null,
-            tint = color
+            tint = color,
         )
         Text(
             text = title,
             color = color,
             fontSize = 18.sp,
-            modifier = Modifier.padding(top = 10.dp).testTag("first_item_text_tag")
+            modifier = Modifier.padding(top = 10.dp).testTag("first_item_text_tag"),
         )
     }
 }
 
 @Composable
 fun SecondItem(
-    roType: String, title: String,
+    roType: String,
+    title: String,
     selectedState: MutableState<Pair<String, Int>>,
     thirdItemColor: MutableState<Boolean>,
     secondItemColor: MutableState<Boolean>,
-    firstItemColor: MutableState<Boolean>
+    firstItemColor: MutableState<Boolean>,
 ) {
     val status = if (roType == AppConstants.WINDOWS) AppConstants.AJAR else AppConstants.FLASHING
     val icon =
         if (roType == AppConstants.WINDOWS) R.drawable.ic_windows_ajar else R.drawable.ic_flash_lights
     Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .wrapContentSize()
-            .clickable {
-                firstItemColor.value = false
-                secondItemColor.value = true
-                thirdItemColor.value = false
-                selectedState.value = Pair(status, icon)
-            }.testTag("second_item_click_action_tag"),
+        modifier =
+            Modifier
+                .padding(16.dp)
+                .wrapContentSize()
+                .clickable {
+                    firstItemColor.value = false
+                    secondItemColor.value = true
+                    thirdItemColor.value = false
+                    selectedState.value = Pair(status, icon)
+                }.testTag("second_item_click_action_tag"),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         val color =
-            if (selectedState.value.first == status || secondItemColor.value) LightBlue
-            else if (selectedState.value.first.lowercase() == PARTIAL_OPENED.lowercase()) LightBlue
-            else Black
+            if (selectedState.value.first == status || secondItemColor.value) {
+                LightBlue
+            } else if (selectedState.value.first.lowercase() == PARTIAL_OPENED.lowercase()) {
+                LightBlue
+            } else {
+                Black
+            }
         Icon(
             imageVector = ImageVector.vectorResource(icon),
             contentDescription = null,
-            tint = color
+            tint = color,
         )
         Text(
             text = title,
             color = color,
             fontSize = 18.sp,
-            modifier = Modifier.padding(top = 10.dp).testTag("first_item_title_tag")
+            modifier = Modifier.padding(top = 10.dp).testTag("first_item_title_tag"),
         )
     }
 }
 
 @Composable
 fun ThirdItem(
-    roType: String, title: String,
+    roType: String,
+    title: String,
     selectedState: MutableState<Pair<String, Int>>,
     thirdItemColor: MutableState<Boolean>,
     secondItemColor: MutableState<Boolean>,
-    firstItemColor: MutableState<Boolean>
+    firstItemColor: MutableState<Boolean>,
 ) {
     val status = if (roType == AppConstants.WINDOWS) AppConstants.OPENED else AppConstants.ON
     val icon =
         if (roType == AppConstants.WINDOWS) R.drawable.ic_windows_open else R.drawable.ic_lights_on
     Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .wrapContentSize()
-            .clickable {
-                firstItemColor.value = false
-                secondItemColor.value = false
-                thirdItemColor.value = true
-                selectedState.value = Pair(status, icon)
-            }.testTag("third_item_click_action_tag"),
+        modifier =
+            Modifier
+                .padding(16.dp)
+                .wrapContentSize()
+                .clickable {
+                    firstItemColor.value = false
+                    secondItemColor.value = false
+                    thirdItemColor.value = true
+                    selectedState.value = Pair(status, icon)
+                }.testTag("third_item_click_action_tag"),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         val color =
             if (selectedState.value.first == status || thirdItemColor.value) LightBlue else Black
         Icon(
             imageVector = ImageVector.vectorResource(icon),
             contentDescription = null,
-            tint = color
+            tint = color,
         )
         Text(
             text = title,
             color = color,
             fontSize = 18.sp,
-            modifier = Modifier.padding(top = 10.dp).testTag("third_item_title_tag")
+            modifier = Modifier.padding(top = 10.dp).testTag("third_item_title_tag"),
         )
     }
 }

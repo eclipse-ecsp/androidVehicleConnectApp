@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id("org.cyclonedx.bom") version ("1.9.0")
 }
@@ -14,9 +13,9 @@ buildscript {
         maven(url = "https://plugins.gradle.org/m2/")
     }
     dependencies {
-        classpath ("com.android.tools.build:gradle:8.1.4")
+        classpath("com.android.tools.build:gradle:8.1.4")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
-        classpath("com.google.gms:google-services:4.4.1")
+        classpath("com.google.gms:google-services:4.4.2")
         classpath("org.cyclonedx:cyclonedx-gradle-plugin:1.9.0")
     }
 }
@@ -35,8 +34,8 @@ project.allprojects {
                 "debugUnitTestRuntimeClasspath",
                 "releaseUnitTestRuntimeClasspath",
                 "androidVehicleConnectSDK:debugApiElements",
-                "app:debugApiElements"
-            )
+                "app:debugApiElements",
+            ),
         )
         setProjectType("application")
         outputFormat = "xml"

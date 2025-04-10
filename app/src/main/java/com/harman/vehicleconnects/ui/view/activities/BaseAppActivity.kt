@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.activities
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,29 +24,15 @@ import com.harman.vehicleconnects.helper.AppConstants
 import com.harman.vehicleconnects.helper.toastError
 import com.harman.vehicleconnects.services.ConnectionManager
 
-
 /**
- * Copyright (c) 2023-24 Harman International
+ * Base activity of application, used to sign out from the session and get the network connectivity info
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
  */
 open class BaseAppActivity : ComponentActivity(), ConnectionManager.ConnectionListener {
-
-    private val connectivityManager : ConnectionManager by lazy {
+    private val connectivityManager: ConnectionManager by lazy {
         ConnectionManager(this@BaseAppActivity, this)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         connectivityManager.subscribe()
@@ -63,5 +64,4 @@ open class BaseAppActivity : ComponentActivity(), ConnectionManager.ConnectionLi
         Log.d("Network Status", "Connection available")
 //        toastError(this@BaseAppActivity, "Internet connectivity Available")
     }
-
 }

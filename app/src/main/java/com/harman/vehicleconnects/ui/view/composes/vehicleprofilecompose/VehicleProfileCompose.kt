@@ -1,8 +1,22 @@
 package com.harman.vehicleconnects.ui.view.composes.vehicleprofilecompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,140 +41,144 @@ import com.harman.vehicleconnects.R
 import com.harman.vehicleconnects.helper.AppConstants.ASSOCIATED
 import com.harman.vehicleconnects.helper.AppConstants.ASSOCIATION_INITIATED
 import com.harman.vehicleconnects.models.dataclass.VehicleProfileModel
-import com.harman.vehicleconnects.models.routes.VehicleProfileRoute
-import com.harman.vehicleconnects.models.viewmodels.DashboardVM
 import com.harman.vehicleconnects.models.viewmodels.VehicleProfileVM
 import com.harman.vehicleconnects.ui.theme.Black
 import com.harman.vehicleconnects.ui.theme.DarkGray
 import com.harman.vehicleconnects.ui.theme.LightGray
 import com.harman.vehicleconnects.ui.theme.MildWhite
-import com.harman.vehicleconnects.ui.theme.Red
 import com.harman.vehicleconnects.ui.theme.White
 import com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose.ShowAlertDialog
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * VehicleProfileCompose contains vehicle profile screen related compose functions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
-
+ */
 @Composable
 fun Activity.VehicleProfileMainCompose(
-    vehicleProfileModel: VehicleProfileModel?, vehicleProfileVM: VehicleProfileVM?,
+    vehicleProfileModel: VehicleProfileModel?,
+    vehicleProfileVM: VehicleProfileVM?,
     navController: NavHostController,
-    openDialog: MutableState<Boolean>?
+    openDialog: MutableState<Boolean>?,
 ) {
     LaunchedEffect(Unit) {
         vehicleProfileVM?.setTopBarTitle(getString(R.string.vehicle_profile_text))
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .verticalScroll(rememberScrollState()),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(White)
+                .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         Text(
-            modifier = Modifier
-                .background(LightGray)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(30.dp).testTag("vehicle_profile_name_text_tag"),
-            text = vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
-                ?: "",
+            modifier =
+                Modifier
+                    .background(LightGray)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(30.dp).testTag("vehicle_profile_name_text_tag"),
+            text =
+                vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
+                    ?: "",
             color = Black,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         Text(
-            modifier = Modifier
-                .background(MildWhite)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(40.dp),
+            modifier =
+                Modifier
+                    .background(MildWhite)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(40.dp),
             text = "Vehicle",
             color = Black,
             fontSize = 17.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp),
-            text = "VIN", color = Black,
-            fontSize = 17.sp
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp),
+            text = "VIN",
+            color = Black,
+            fontSize = 17.sp,
         )
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp).testTag("vin_text_tag"),
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp).testTag("vin_text_tag"),
             text = vehicleProfileModel?.vehicleDetailData?.vin ?: "NA",
             color = DarkGray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp),
-            text = "Make/Model/Year", color = Black,
-            fontSize = 17.sp
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp),
+            text = "Make/Model/Year",
+            color = Black,
+            fontSize = 17.sp,
         )
         val makeModelYear =
             "${vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.make} " +
-                    "${vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.model} " +
-                    "${vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.modelYear}"
+                "${vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.model} " +
+                "${vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.modelYear}"
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp).testTag("make_model_year_text_tag"),
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp).testTag("make_model_year_text_tag"),
             text = makeModelYear,
             color = DarkGray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Column /*(modifier = Modifier.clickable {
@@ -168,172 +186,210 @@ fun Activity.VehicleProfileMainCompose(
                 popUpTo(navController.graph.startDestinationId)
                 launchSingleTop = true
             }
-        })*/{
+        })*/ {
             Text(
-                modifier = Modifier
-                    .background(White)
-                    .fillMaxWidth()
-                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                    .height(20.dp),
-                text = "Nickname", color = Black,
-                fontSize = 17.sp
+                modifier =
+                    Modifier
+                        .background(White)
+                        .fillMaxWidth()
+                        .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                        .height(20.dp),
+                text = "Nickname",
+                color = Black,
+                fontSize = 17.sp,
             )
 
             Text(
-                modifier = Modifier
-                    .background(White)
-                    .fillMaxWidth()
-                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                    .height(20.dp).testTag("nick_name_text_tag"),
-                text = vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
-                    ?: "NA",
+                modifier =
+                    Modifier
+                        .background(White)
+                        .fillMaxWidth()
+                        .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                        .height(20.dp).testTag("nick_name_text_tag"),
+                text =
+                    vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
+                        ?: "NA",
                 color = DarkGray,
-                fontSize = 16.sp
+                fontSize = 16.sp,
             )
         }
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp),
-            text = "Color", color = Black,
-            fontSize = 17.sp
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp),
+            text = "Color",
+            color = Black,
+            fontSize = 17.sp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp).testTag("vehicle_color_tag"),
-            text = vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.baseColor
-                ?: "NA",
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp).testTag("vehicle_color_tag"),
+            text =
+                vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.baseColor
+                    ?: "NA",
             color = DarkGray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(MildWhite)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(40.dp),
+            modifier =
+                Modifier
+                    .background(MildWhite)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(40.dp),
             text = "Vehicle Connect Device",
             color = Black,
             fontSize = 17.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp),
-            text = "Status", color = Black,
-            fontSize = 17.sp
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp),
+            text = "Status",
+            color = Black,
+            fontSize = 17.sp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp).testTag("vehicle_status_tag"),
-            text = when (vehicleProfileModel?.associatedDevice?.mAssociationStatus) {
-                ASSOCIATED -> "Active"
-                ASSOCIATION_INITIATED -> "Activation Pending"
-                else -> "Disassociated"
-            },
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp).testTag("vehicle_status_tag"),
+            text =
+                when (vehicleProfileModel?.associatedDevice?.mAssociationStatus) {
+                    ASSOCIATED -> "Active"
+                    ASSOCIATION_INITIATED -> "Activation Pending"
+                    else -> "Disassociated"
+                },
             color = DarkGray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp),
-            text = "IMEI", color = Black,
-            fontSize = 17.sp
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp),
+            text = "IMEI",
+            color = Black,
+            fontSize = 17.sp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp).testTag("vehicle_imei_tag"),
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp).testTag("vehicle_imei_tag"),
             text = vehicleProfileModel?.associatedDevice?.mImei ?: "NA",
             color = DarkGray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp),
-            text = "Firmware Version", color = Black,
-            fontSize = 17.sp
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp),
+            text = "Firmware Version",
+            color = Black,
+            fontSize = 17.sp,
         )
 
         Text(
-            modifier = Modifier
-                .background(White)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(20.dp).testTag("vehicle_firmware_tag"),
-            text = vehicleProfileModel?.associatedDevice?.mSoftwareVersion
-                ?: "NA",
+            modifier =
+                Modifier
+                    .background(White)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(20.dp).testTag("vehicle_firmware_tag"),
+            text =
+                vehicleProfileModel?.associatedDevice?.mSoftwareVersion
+                    ?: "NA",
             color = DarkGray,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
 
         HorizontalDivider(
-            color = LightGray, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .height(1.dp), thickness = 1.dp
+            color = LightGray,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .height(1.dp),
+            thickness = 1.dp,
         )
 
         /*Text(
@@ -349,21 +405,21 @@ fun Activity.VehicleProfileMainCompose(
             color = Red,
             fontSize = 17.sp
         )*/
-
     }
 }
 
 @Composable
 fun Activity.ShowVehicleTerminateDialogBox(
     vehicleProfileVM: VehicleProfileVM,
-    openDialog: MutableState<Boolean>?
+    openDialog: MutableState<Boolean>?,
 ) {
     ShowAlertDialog(
         title = getString(R.string.remove_vehicle_text),
         message = getString(R.string.remove_vehicle_sub_text),
         onDismiss = {
             openDialog?.value = false
-        }) {
+        },
+    ) {
         vehicleProfileVM.clickedOnRemoveVehicle(true)
         openDialog?.value = false
     }

@@ -1,29 +1,4 @@
 package com.harman.vehicleconnects.models.viewmodels
-
-import android.app.Activity
-import androidx.compose.runtime.MutableState
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
-import com.harman.androidvehicleconnectsdk.roservice.model.RemoteOperationState
-import com.harman.androidvehicleconnectsdk.roservice.model.RoEventHistoryResponse
-import com.harman.androidvehicleconnectsdk.roservice.model.RoStatusResponse
-import com.harman.vehicleconnects.helper.AppConstants
-import com.harman.vehicleconnects.helper.AppConstants.FORCED_FAILURE
-import com.harman.vehicleconnects.helper.AppConstants.PENDING
-import com.harman.vehicleconnects.helper.dataToJson
-import com.harman.vehicleconnects.helper.fromJson
-import com.harman.vehicleconnects.helper.isRequestPendingLong
-import com.harman.vehicleconnects.helper.toastError
-import com.harman.vehicleconnects.models.dataclass.ROErrorMessage
-import com.harman.vehicleconnects.models.dataclass.RemoteOperationItem
-import com.harman.vehicleconnects.repository.DashboardRepository
-import com.harman.vehicleconnects.services.RemoteOperationService
-import com.harman.vehicleconnects.services.RoRequestLoopService
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -40,6 +15,36 @@ import com.harman.vehicleconnects.services.RoRequestLoopService
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.app.Activity
+import androidx.compose.runtime.MutableState
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
+import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
+import com.harman.androidvehicleconnectsdk.roservice.model.RemoteOperationState
+import com.harman.androidvehicleconnectsdk.roservice.model.RoEventHistoryResponse
+import com.harman.androidvehicleconnectsdk.roservice.model.RoStatusResponse
+import com.harman.vehicleconnects.helper.AppConstants
+import com.harman.vehicleconnects.helper.AppConstants.FORCED_FAILURE
+import com.harman.vehicleconnects.helper.AppConstants.PENDING
+import com.harman.vehicleconnects.helper.fromJson
+import com.harman.vehicleconnects.helper.isRequestPendingLong
+import com.harman.vehicleconnects.helper.toastError
+import com.harman.vehicleconnects.models.dataclass.ROErrorMessage
+import com.harman.vehicleconnects.models.dataclass.RemoteOperationItem
+import com.harman.vehicleconnects.repository.DashboardRepository
+import com.harman.vehicleconnects.services.RemoteOperationService
+import com.harman.vehicleconnects.services.RoRequestLoopService
+
+/**
+ * Represents the View Model class used by Remote operation screen
+ *
+ * @constructor
+ *
+ * @param activity of Application lifecycle
+ */
 class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.application) {
     //    private var checkRoRequestTimer: Job? = null
     private var checkRoRequest = MutableLiveData<Triple<String, String, Boolean>>()
@@ -70,10 +75,19 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         }
     }*/
 
+    /**
+     * Function to trigger the grid view item click
+     *
+     * @param eventTitleName title name of the event
+     * @param state state of the event
+     * @param showBottomSheet [MutableState] of [Triple] <[Boolean], [eventTitleName], [state]>
+     * @param openDialog
+     */
     fun gridItemClick(
-        eventTitleName: String, state: String,
+        eventTitleName: String,
+        state: String,
         showBottomSheet: MutableState<Triple<Boolean, String, String>>?,
-        openDialog: MutableState<Triple<Boolean, String, String>>?
+        openDialog: MutableState<Triple<Boolean, String, String>>?,
     ) {
         when (eventTitleName) {
             AppConstants.WINDOWS, AppConstants.LIGHT -> {
@@ -90,7 +104,7 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         activity: Activity,
         roEventHistoryResponse: CustomMessage<List<RoEventHistoryResponse>>?,
         lazyStaggeredGridList: MutableState<ArrayList<RemoteOperationItem>>?,
-        notifyRoUpdate: MutableState<Int>
+        notifyRoUpdate: MutableState<Int>,
     ) {
         if (roEventHistoryResponse?.response != null) {
             val hashMap: HashMap<String, RoEventHistoryResponse> = HashMap()
@@ -198,7 +212,17 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
             toastError(activity, roEventHistoryResponse.error?.message.toString())
     }*/
 
-
+    /**
+     * Function is to get the remote operation history data using SDK API
+     *
+     * @param lifecycleOwner Application lifecycle owner object
+     * @param activity application activity
+     * @param isProgressBarLoading [MutableState] of [Boolean]
+     * @param lazyStaggeredGridList [MutableState] of [RemoteOperationItem] 's [ArrayList]
+     * @param notifyRoUpdate [MutableState] of [Integer] to notify internal logic
+     * @param userId is [String] value
+     * @param vehicleId is [String] value
+     */
     fun getRemoteOperationHistory(
         lifecycleOwner: LifecycleOwner,
         activity: Activity,
@@ -206,14 +230,16 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         lazyStaggeredGridList: MutableState<ArrayList<RemoteOperationItem>>?,
         notifyRoUpdate: MutableState<Int>,
         userId: String,
-        vehicleId: String
+        vehicleId: String,
     ) {
         dashboardRepository.getRemoteOperationHistory(userId, vehicleId)
             .observe(lifecycleOwner) { roEventHistoryResponse ->
                 isProgressBarLoading?.value = false
                 updateListOnRoHistory(
-                    activity, roEventHistoryResponse,
-                    lazyStaggeredGridList, notifyRoUpdate
+                    activity,
+                    roEventHistoryResponse,
+                    lazyStaggeredGridList,
+                    notifyRoUpdate,
                 )
             }
     }
@@ -225,6 +251,19 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         }
     }*/
 
+    /**
+     * Function is to check Remote operation request status using SDK API
+     *
+     * @param lifecycleOwner Application lifecycle owner object
+     * @param activity application activity
+     * @param userId is [String] value
+     * @param vehicleId is [String] value
+     * @param roRequestId is RO request ID
+     * @param isProgressBarLoading [MutableState] of [Boolean]
+     * @param lazyStaggeredGridList [MutableState] of [RemoteOperationItem] 's [ArrayList]
+     * @param notifyRoUpdate [MutableState] of [Integer] to notify internal logic
+     * @param isFromLoop [Boolean] value for logic
+     */
     fun checkRoRequestStatus(
         lifecycleOwner: LifecycleOwner,
         activity: Activity,
@@ -234,7 +273,7 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         isProgressBarLoading: MutableState<Boolean>?,
         lazyStaggeredGridList: MutableState<ArrayList<RemoteOperationItem>>,
         notifyRoUpdate: MutableState<Int>,
-        isFromLoop: Boolean
+        isFromLoop: Boolean,
     ) {
         isProgressBarLoading?.value = true
         RoRequestLoopService(this, remoteOperationService).roRequestStatusCallTimer(
@@ -246,7 +285,7 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
             dashboardRepository,
             lazyStaggeredGridList,
             notifyRoUpdate,
-            isProgressBarLoading
+            isProgressBarLoading,
         )
         /*dashboardRepository.checkRoRequestStatus(userId, vehicleId, roRequestId)
             .observe(lifecycleOwner) { roEventHistoryResponse ->
@@ -259,6 +298,19 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
             }*/
     }
 
+    /**
+     * Function is to update the state of RO using SDK API
+     *
+     * @param activity application activity
+     * @param lifecycleOwner Application lifecycle owner object
+     * @param userId is [String] value
+     * @param vehicleId is [String] value
+     * @param remoteOperationState RO state [RemoteOperationState]
+     * @param isProgressBarLoading [MutableState] of [Boolean]
+     * @param percentage percentage of RO configuration event (comes in window)
+     * @param duration duration of ro event to happen (comes in window)
+     * @param isFromClickAction [Boolean] value for logic
+     */
     fun updateRoState(
         activity: Activity,
         lifecycleOwner: LifecycleOwner,
@@ -268,20 +320,21 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         isProgressBarLoading: MutableState<Boolean>?,
         percentage: Int? = null,
         duration: Int? = null,
-        isFromClickAction: Boolean = false
+        isFromClickAction: Boolean = false,
     ) {
         dashboardRepository.updateRoState(
             userId,
             vehicleId,
             remoteOperationState,
             percentage,
-            duration
+            duration,
         ).observe(lifecycleOwner) { roStatusResponse ->
             isProgressBarLoading?.value = false
             if (!isFromClickAction) {
                 updateROStatus(
                     activity,
-                    vehicleId, roStatusResponse
+                    vehicleId,
+                    roStatusResponse,
                 )
             } else {
                 if (roStatusResponse.status.requestStatus && roStatusResponse.response != null) {
@@ -296,33 +349,66 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         }
     }
 
+    /**
+     * function is to trigger on click of check RO Request status
+     *
+     * @return [LiveData] of [Triple]
+     */
     fun clickedOnCheckRoRequest(): LiveData<Triple<String, String, Boolean>> = checkRoRequest
 
-    internal fun triggerRoRequestCheck(
+    private fun triggerRoRequestCheck(
         vehicleId: String,
         requestId: String,
-        isFromLoop: Boolean = false
+        isFromLoop: Boolean = false,
     ) = checkRoRequest.postValue(Triple(vehicleId, requestId, isFromLoop))
 
+    /**
+     * Function is to update the device id value
+     *
+     * @param deviceId device Id as [String]
+     */
     fun clickOnRoHistory(deviceId: String) = roHistory.postValue(deviceId)
 
+    /**
+     * Function is to trigger the RO history using device id value
+     *
+     * @return [LiveData] of device id
+     */
     fun getRoHistoryData(): LiveData<String> {
         return roHistory
     }
 
+    /**
+     * Function to set the update RO status
+     *
+     * @param remoteOperationState RO state
+     * @param percentage as [Integer]
+     * @param duration as [Integer]
+     */
     fun clickOnUpdateRoStatus(
         remoteOperationState: RemoteOperationState,
         percentage: Int? = null,
-        duration: Int? = null
+        duration: Int? = null,
     ) = _updateRoStatusData.postValue(Triple(remoteOperationState, percentage, duration))
 
-    fun updateRoStatusData(): LiveData<Triple<RemoteOperationState, Int?, Int?>> =
-        _updateRoStatusData
+    /**
+     * Function is to update the RO status
+     *
+     * @return [LiveData] of [Triple]<[RemoteOperationState, [Integer], [Integer]]>
+     */
+    fun updateRoStatusData(): LiveData<Triple<RemoteOperationState, Int?, Int?>> = _updateRoStatusData
 
+    /**
+     * Function is to update the RO Status
+     *
+     * @param activity application activity
+     * @param deviceId device id as [String]
+     * @param roStatusResponse [CustomMessage] of [RoStatusResponse]
+     */
     private fun updateROStatus(
         activity: Activity,
         deviceId: String?,
-        roStatusResponse: CustomMessage<RoStatusResponse>
+        roStatusResponse: CustomMessage<RoStatusResponse>,
     ) {
         if (roStatusResponse.status.requestStatus && roStatusResponse.response != null) {
             val response = roStatusResponse.response as RoStatusResponse
@@ -330,7 +416,7 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
                 if (deviceId != null) {
                     triggerRoRequestCheck(
                         deviceId,
-                        response.requestId!!
+                        response.requestId!!,
                     )
                 }
             }

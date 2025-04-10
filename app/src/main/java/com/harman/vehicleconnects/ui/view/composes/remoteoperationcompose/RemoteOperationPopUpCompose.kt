@@ -1,45 +1,4 @@
 package com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose
-
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.harman.vehicleconnects.R
-import com.harman.vehicleconnects.helper.AppConstants
-import com.harman.vehicleconnects.ui.theme.Black
-import com.harman.vehicleconnects.ui.theme.DarkGray
-import com.harman.vehicleconnects.ui.theme.LightBlue
-import com.harman.vehicleconnects.ui.theme.White
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -56,90 +15,137 @@ import com.harman.vehicleconnects.ui.theme.White
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.harman.vehicleconnects.ui.theme.DarkGray
+import com.harman.vehicleconnects.ui.theme.LightBlue
+import com.harman.vehicleconnects.ui.theme.White
 
+/**
+ * RemoteOperationPopUpCompose contains RO pop compose functions
+ *
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetOptionsRoCompose(
     titleText: String,
     selectedState: String,
     onDismiss: () -> Unit,
-    onApply: (Triple<String, String, Int>) -> Unit
+    onApply: (Triple<String, String, Int>) -> Unit,
 ) {
-    val selectedMutableState = remember {
-        mutableStateOf(Pair(selectedState, 0))
-    }
+    val selectedMutableState =
+        remember {
+            mutableStateOf(Pair(selectedState, 0))
+        }
     val modalBottomSheetState = rememberModalBottomSheetState()
-    val firstItemColor = remember {
-        mutableStateOf(false)
-    }
-    val thirdItemColor = remember {
-        mutableStateOf(false)
-    }
-    val secondItemColor = remember {
-        mutableStateOf(false)
-    }
+    val firstItemColor =
+        remember {
+            mutableStateOf(false)
+        }
+    val thirdItemColor =
+        remember {
+            mutableStateOf(false)
+        }
+    val secondItemColor =
+        remember {
+            mutableStateOf(false)
+        }
     LaunchedEffect(key1 = Unit) {
         modalBottomSheetState.expand()
     }
-    if (modalBottomSheetState.isVisible)
+    if (modalBottomSheetState.isVisible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,
-            sheetState = modalBottomSheetState
+            sheetState = modalBottomSheetState,
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(White)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(White),
             ) {
-
                 Row(
-                    modifier = Modifier
-                        .height(60.dp)
-                        .fillMaxWidth()
-                        .drawWithContent {
-                            drawContent()
-                            val strokeWidth = 2.dp.value * density
-                            val y = size.height - strokeWidth / 2
-                            drawLine(
-                                DarkGray,
-                                Offset((6.dp).toPx(), y),
-                                Offset(size.width - 6.dp.toPx(), y)
-                            )
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier =
+                        Modifier
+                            .height(60.dp)
+                            .fillMaxWidth()
+                            .drawWithContent {
+                                drawContent()
+                                val strokeWidth = 2.dp.value * density
+                                val y = size.height - strokeWidth / 2
+                                drawLine(
+                                    DarkGray,
+                                    Offset((6.dp).toPx(), y),
+                                    Offset(size.width - 6.dp.toPx(), y),
+                                )
+                            },
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = titleText, color = DarkGray,
+                        text = titleText,
+                        color = DarkGray,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .wrapContentWidth()
-                            .padding(15.dp).testTag("bottom_sheet_title_text_tag"),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .wrapContentWidth()
+                                .padding(15.dp).testTag("bottom_sheet_title_text_tag"),
                         textAlign = TextAlign.Start,
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
                     )
                     Text(
                         text = "APPLY",
-                        color = if (firstItemColor.value
-                            || secondItemColor.value
-                            || thirdItemColor.value
-                        ) LightBlue else DarkGray,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .wrapContentWidth()
-                            .padding(15.dp).testTag("apply_btn_tag")
-                            .clickable {
-                                onApply(
-                                    Triple(
-                                        titleText,
-                                        selectedMutableState.value.first,
-                                        selectedMutableState.value.second
-                                    )
-                                )
+                        color =
+                            if (firstItemColor.value ||
+                                secondItemColor.value ||
+                                thirdItemColor.value
+                            ) {
+                                LightBlue
+                            } else {
+                                DarkGray
                             },
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .wrapContentWidth()
+                                .padding(15.dp).testTag("apply_btn_tag")
+                                .clickable {
+                                    onApply(
+                                        Triple(
+                                            titleText,
+                                            selectedMutableState.value.first,
+                                            selectedMutableState.value.second,
+                                        ),
+                                    )
+                                },
                         textAlign = TextAlign.End,
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
                 WindowsAndLightStateCompose(
@@ -147,8 +153,9 @@ fun BottomSheetOptionsRoCompose(
                     selectedState = selectedMutableState,
                     thirdItemColor = thirdItemColor,
                     secondItemColor = secondItemColor,
-                    firstItemColor = firstItemColor
+                    firstItemColor = firstItemColor,
                 )
             }
         }
+    }
 }

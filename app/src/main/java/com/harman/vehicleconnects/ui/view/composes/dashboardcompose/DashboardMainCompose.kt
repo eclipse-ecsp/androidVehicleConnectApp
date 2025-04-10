@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.composes.dashboardcompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -42,25 +57,11 @@ import com.harman.vehicleconnects.ui.theme.White
 import com.harman.vehicleconnects.ui.view.composes.deviceinstallationcompose.ProgressBar
 import com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose.BottomSheetOptionsRoCompose
 import com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose.RemoteOperationScreen
-import com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose.setStateIcon
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * DashboardMainCompose file is used to handle the Bottom Navigation items compose
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
-
+ */
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     NavigationBar {
@@ -90,10 +91,10 @@ fun BottomNavigationBar(navController: NavController) {
                     Text(
                         navItem.label,
                         color = LightBlue,
-                        modifier = Modifier.testTag("navigation_bar_text_tag")
+                        modifier = Modifier.testTag("navigation_bar_text_tag"),
                     )
                 },
-                alwaysShowLabel = false
+                alwaysShowLabel = false,
             )
         }
     }
@@ -115,7 +116,7 @@ fun Activity.NavHostContainer(
     showVehicleList: MutableState<Pair<Boolean, ArrayList<VehicleProfileModel?>>>,
     openConfirmationDialog: MutableState<Boolean>?,
     notifyRoUpdate: MutableState<Int>,
-    lifecycleOwner: LifecycleOwner
+    lifecycleOwner: LifecycleOwner,
 ) {
     NavHost(
         navController,
@@ -132,7 +133,7 @@ fun Activity.NavHostContainer(
                 lazyStaggeredGridList,
                 isProgressBarLoading,
                 notifyRoUpdate,
-                lifecycleOwner
+                lifecycleOwner,
             )
         }
         composable(BottomNavItem.Settings.route) {
@@ -142,7 +143,7 @@ fun Activity.NavHostContainer(
                 selectedVehicleId?.value?.first,
                 vehicleProfileList,
                 openConfirmationDialog,
-                showVehicleList
+                showVehicleList,
             )
         }
         // disabled for current iteration
@@ -180,41 +181,46 @@ fun mainCompose(
     notifyRoUpdate: MutableState<Int>,
     selectedVehicleIndex: MutableState<Int>?,
     lifecycleOwner: LifecycleOwner,
-    launchActivity: () -> Unit
+    launchActivity: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .padding(padding),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(White)
+                .padding(padding),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
-        if (showVehicleList.value.first)
-            VehicleSelectionListView(vehicleList = showVehicleList.value.second,
+        if (showVehicleList.value.first) {
+            VehicleSelectionListView(
+                vehicleList = showVehicleList.value.second,
                 selectedVehicleId?.value!!.first,
                 selectedVehicleId.value.second,
                 onVehicleSelection = { vehicleProfileModel, index ->
-                    selectedVehicleId.value = Triple(
-                        vehicleProfileModel?.associatedDevice?.mDeviceId.toString(),
-                        vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
-                            ?: "No Name",
-                        vehicleProfileModel?.vehicleDetailData?.vehicleId.toString()
-                    )
+                    selectedVehicleId.value =
+                        Triple(
+                            vehicleProfileModel?.associatedDevice?.mDeviceId.toString(),
+                            vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
+                                ?: "No Name",
+                            vehicleProfileModel?.vehicleDetailData?.vehicleId.toString(),
+                        )
                     selectedVehicleIndex?.value = index
                     if (navController.currentBackStackEntry?.destination?.route == BottomNavItem.RemoteOperation.route) {
                         notifyRoUpdate.value = notifyRoUpdate.value + 1
                         remoteOperationVM.clickOnRoHistory(selectedVehicleId.value.first)
                     }
-                }) {
+                },
+            ) {
                 launchActivity()
             }
+        }
         activity.NavHostContainer(
             activity,
             navController = navController, dashboardVM, remoteOperationVM, notificationVM,
             vehicleProfileList = vehicleProfileList, isProgressBarLoading, showBottomSheet,
             openDialog, selectedVehicleId, lazyStaggeredGridList,
-            showVehicleList, openConfirmationDialog, notifyRoUpdate, lifecycleOwner
+            showVehicleList, openConfirmationDialog, notifyRoUpdate, lifecycleOwner,
         )
 
         isProgressBarLoading?.value?.let {
@@ -223,22 +229,24 @@ fun mainCompose(
 
         if (showBottomSheet!!.value.first) {
             if (showBottomSheet.value.second == AppConstants.WINDOWS) {
-                AppConstants.setWindowCurrentState(activity,
-                    showBottomSheet.value.third.ifEmpty { "Closed" })
+                AppConstants.setWindowCurrentState(
+                    activity,
+                    showBottomSheet.value.third.ifEmpty { "Closed" },
+                )
             }
             BottomSheetOptionsRoCompose(
                 titleText = showBottomSheet.value.second,
                 selectedState = showBottomSheet.value.third,
                 onDismiss = {
                     showBottomSheet.value = Triple(false, "", "")
-                })
-            {
+                },
+            ) {
                 if (showBottomSheet.value.third != it.second) {
                     showBottomSheet.value = Triple(false, "", "")
                     Toast.makeText(
                         activity,
                         "${it.first} : ${it.second}",
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     ).show()
                     if (lazyStaggeredGridList != null) {
                         when (it.first) {
@@ -248,7 +256,9 @@ fun mainCompose(
                                         AppConstants.CLOSED -> RemoteOperationState.WindowClose
                                         AppConstants.OPENED -> RemoteOperationState.WindowOpen
                                         else -> RemoteOperationState.WindowsAjar
-                                    }, percentage = 60, duration = 8
+                                    },
+                                    percentage = 60,
+                                    duration = 8,
                                 )
                             }
 
@@ -258,7 +268,8 @@ fun mainCompose(
                                         AppConstants.ON -> RemoteOperationState.LightsOn
                                         AppConstants.OFF -> RemoteOperationState.LightsOff
                                         else -> RemoteOperationState.LightsFlash
-                                    }, duration = 10
+                                    },
+                                    duration = 10,
                                 )
                             }
                         }
@@ -267,17 +278,15 @@ fun mainCompose(
                     Toast.makeText(
                         activity,
                         "${showBottomSheet.value.second} already ${
-                            if (showBottomSheet.value.third.lowercase() == PARTIAL_OPENED.lowercase()) 
-                                AJAR 
-                        else 
-                            showBottomSheet.value.third}",
-                        Toast.LENGTH_LONG
+                            if (showBottomSheet.value.third.lowercase() == PARTIAL_OPENED.lowercase()) {
+                                AJAR
+                            } else {
+                                showBottomSheet.value.third
+                            }}",
+                        Toast.LENGTH_LONG,
                     ).show()
                 }
             }
         }
     }
 }
-
-
-

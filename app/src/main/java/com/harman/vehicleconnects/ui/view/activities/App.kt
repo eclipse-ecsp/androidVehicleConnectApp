@@ -19,11 +19,14 @@ import androidx.multidex.MultiDexApplication
 import com.google.firebase.FirebaseApp
 import com.harman.androidvehicleconnectsdk.helper.AppManager
 
-class App : MultiDexApplication(){
+/**
+ * Main Application activity
+ *
+ */
+class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         AppManager.initialize(this)
         FirebaseApp.initializeApp(this)
     }
-
 }

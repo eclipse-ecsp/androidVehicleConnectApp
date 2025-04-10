@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.composes.remoteoperationcompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -18,22 +33,10 @@ import com.harman.vehicleconnects.models.dataclass.RemoteOperationItem
 import com.harman.vehicleconnects.models.viewmodels.DashboardVM
 import com.harman.vehicleconnects.models.viewmodels.RemoteOperationVM
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * RemoteOperationMainScreen contains RO main screen compose functions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ */
 
 @Composable
 fun Activity.RemoteOperationScreen(
@@ -58,14 +61,14 @@ fun Activity.RemoteOperationScreen(
 
     RemoteOperationGridViewCompose(lazyStaggeredGridList?.value) {
         if (isInternetAvailable(activity)) {
-            if (selectedVehicleId?.value?.first != null && selectedVehicleId.value.first.isNotEmpty()
-                && isProgressBarLoading?.value == false
+            if (selectedVehicleId?.value?.first != null && selectedVehicleId.value.first.isNotEmpty() &&
+                isProgressBarLoading?.value == false
             ) {
                 remoteOperationVM.gridItemClick(
                     it.itemName,
                     it.statusText,
                     showBottomSheet,
-                    openDialog
+                    openDialog,
                 )
             }
         } else {
@@ -76,21 +79,28 @@ fun Activity.RemoteOperationScreen(
     if (openDialog!!.value.first) {
         when (openDialog.value.third) {
             AppConstants.ALARM -> {
-                ShowAlertDialog(title = if (openDialog.value.second.lowercase() == AppConstants.OFF.lowercase())
-                    getString(R.string.alarm_confirm_activation_text)
-                else getString(R.string.alarm_confirm_deactivation_text), onDismiss = {
-                    closeAlertDialog(openDialog)
-                }) {
+                ShowAlertDialog(
+                    title =
+                        if (openDialog.value.second.lowercase() == AppConstants.OFF.lowercase()) {
+                            getString(R.string.alarm_confirm_activation_text)
+                        } else {
+                            getString(R.string.alarm_confirm_deactivation_text)
+                        },
+                    onDismiss = {
+                        closeAlertDialog(openDialog)
+                    },
+                ) {
                     when (openDialog.value.second.lowercase()) {
-                        AppConstants.ON.lowercase() -> onClickAction(
-                            remoteOperationVM,
-                            this,
-                            isProgressBarLoading,
-                            lifecycleOwner,
-                            selectedVehicleId!!.value.first,
-                            RemoteOperationState.AlarmOff,
-                            8
-                        )
+                        AppConstants.ON.lowercase() ->
+                            onClickAction(
+                                remoteOperationVM,
+                                this,
+                                isProgressBarLoading,
+                                lifecycleOwner,
+                                selectedVehicleId!!.value.first,
+                                RemoteOperationState.AlarmOff,
+                                8,
+                            )
 
                         AppConstants.OFF.lowercase() ->
                             onClickAction(
@@ -100,7 +110,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.AlarmOn,
-                                8
+                                8,
                             )
                     }
                     closeAlertDialog(openDialog)
@@ -108,11 +118,17 @@ fun Activity.RemoteOperationScreen(
             }
 
             AppConstants.DOOR -> {
-                ShowAlertDialog(title = if (openDialog.value.second.lowercase() == AppConstants.LOCKED.lowercase())
-                    getString(R.string.door_unlock_confirm_text)
-                else getString(R.string.door_lock_confirm_text), onDismiss = {
-                    closeAlertDialog(openDialog)
-                }) {
+                ShowAlertDialog(
+                    title =
+                        if (openDialog.value.second.lowercase() == AppConstants.LOCKED.lowercase()) {
+                            getString(R.string.door_unlock_confirm_text)
+                        } else {
+                            getString(R.string.door_lock_confirm_text)
+                        },
+                    onDismiss = {
+                        closeAlertDialog(openDialog)
+                    },
+                ) {
                     when (openDialog.value.second.lowercase()) {
                         AppConstants.LOCKED.lowercase() ->
                             onClickAction(
@@ -122,7 +138,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.DoorsUnLocked,
-                                null
+                                null,
                             )
 
                         AppConstants.UNLOCKED.lowercase() ->
@@ -133,7 +149,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.DoorsLocked,
-                                null
+                                null,
                             )
                     }
                     closeAlertDialog(openDialog)
@@ -142,14 +158,20 @@ fun Activity.RemoteOperationScreen(
 
             AppConstants.ENGINE -> {
                 ShowAlertDialog(
-                    title = if (openDialog.value.second.lowercase() ==
-                        AppConstants.STOPPED.lowercase()
-                    ) getString(
-                        R.string.engin_start_confirm_text
-                    )
-                    else getString(R.string.engin_stop_confirm_text), onDismiss = {
+                    title =
+                        if (openDialog.value.second.lowercase() ==
+                            AppConstants.STOPPED.lowercase()
+                        ) {
+                            getString(
+                                R.string.engin_start_confirm_text,
+                            )
+                        } else {
+                            getString(R.string.engin_stop_confirm_text)
+                        },
+                    onDismiss = {
                         closeAlertDialog(openDialog)
-                    }) {
+                    },
+                ) {
                     when (openDialog.value.second.lowercase()) {
                         AppConstants.STARTED.lowercase() ->
                             onClickAction(
@@ -159,7 +181,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.EngineStop,
-                                8
+                                8,
                             )
 
                         AppConstants.STOPPED.lowercase() ->
@@ -170,7 +192,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.EngineStart,
-                                8
+                                8,
                             )
                     }
                     closeAlertDialog(openDialog)
@@ -178,12 +200,19 @@ fun Activity.RemoteOperationScreen(
             }
 
             AppConstants.TRUNK -> {
-                ShowAlertDialog(title = if (openDialog.value.second.lowercase() == AppConstants.LOCKED.lowercase()) getString(
-                    R.string.trunk_opening_text
-                )
-                else getString(R.string.trunk_closing_text), onDismiss = {
-                    closeAlertDialog(openDialog)
-                }) {
+                ShowAlertDialog(
+                    title =
+                        if (openDialog.value.second.lowercase() == AppConstants.LOCKED.lowercase()) {
+                            getString(
+                                R.string.trunk_opening_text,
+                            )
+                        } else {
+                            getString(R.string.trunk_closing_text)
+                        },
+                    onDismiss = {
+                        closeAlertDialog(openDialog)
+                    },
+                ) {
                     when (openDialog.value.second.lowercase()) {
                         AppConstants.UNLOCKED.lowercase() ->
                             onClickAction(
@@ -193,7 +222,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.TrunkLocked,
-                                null
+                                null,
                             )
 
                         AppConstants.LOCKED.lowercase() ->
@@ -204,7 +233,7 @@ fun Activity.RemoteOperationScreen(
                                 lifecycleOwner,
                                 selectedVehicleId!!.value.first,
                                 RemoteOperationState.TrunkUnLocked,
-                                null
+                                null,
                             )
                     }
                     closeAlertDialog(openDialog)
@@ -232,7 +261,9 @@ private fun onClickAction(
     activity: Activity,
     isProgressBarLoading: MutableState<Boolean>?,
     lifecycleOwner: LifecycleOwner,
-    vehicleId: String, remoteOperationState: RemoteOperationState, duration: Int?
+    vehicleId: String,
+    remoteOperationState: RemoteOperationState,
+    duration: Int?,
 ) {
     val userProfile =
         Gson().fromJson<UserProfile?>(AppConstants.getUserProfile(activity))
@@ -247,7 +278,7 @@ private fun onClickAction(
                 isProgressBarLoading,
                 null,
                 duration,
-                true
+                true,
             )
         }
     }
@@ -257,42 +288,48 @@ private fun closeAlertDialog(openDialog: MutableState<Triple<Boolean, String, St
     openDialog?.value = Triple(false, "", "")
 }
 
-fun setStateIcon(state: String, event: String): Int {
+fun setStateIcon(
+    state: String,
+    event: String,
+): Int {
     var iconId = 0
     when (event) {
         AppConstants.WINDOWS -> {
-            iconId = when (state.lowercase()) {
-                AppConstants.OPENED.lowercase() -> R.drawable.ic_windows_open
-                AppConstants.CLOSED.lowercase() -> R.drawable.ic_windows_closed
-                else -> R.drawable.ic_windows_ajar
-            }
+            iconId =
+                when (state.lowercase()) {
+                    AppConstants.OPENED.lowercase() -> R.drawable.ic_windows_open
+                    AppConstants.CLOSED.lowercase() -> R.drawable.ic_windows_closed
+                    else -> R.drawable.ic_windows_ajar
+                }
         }
 
         AppConstants.LIGHT -> {
-            iconId = when (state.lowercase()) {
-                AppConstants.ON.lowercase() -> R.drawable.ic_lights_on
-                AppConstants.OFF.lowercase() -> R.drawable.ic_lights_off
-                else -> R.drawable.ic_flash_lights
-            }
+            iconId =
+                when (state.lowercase()) {
+                    AppConstants.ON.lowercase() -> R.drawable.ic_lights_on
+                    AppConstants.OFF.lowercase() -> R.drawable.ic_lights_off
+                    else -> R.drawable.ic_flash_lights
+                }
         }
 
         AppConstants.DOOR -> {
-            iconId = when (state.lowercase()) {
-                AppConstants.LOCKED.lowercase() -> R.drawable.ic_door_locked
-                else -> R.drawable.ic_door_unlocked
-            }
+            iconId =
+                when (state.lowercase()) {
+                    AppConstants.LOCKED.lowercase() -> R.drawable.ic_door_locked
+                    else -> R.drawable.ic_door_unlocked
+                }
         }
 
         AppConstants.TRUNK -> {
-            iconId = when (state.lowercase()) {
-                AppConstants.UNLOCKED.lowercase() -> R.drawable.ic_trunk_open
-                else -> R.drawable.ic_trunk_close
-            }
+            iconId =
+                when (state.lowercase()) {
+                    AppConstants.UNLOCKED.lowercase() -> R.drawable.ic_trunk_open
+                    else -> R.drawable.ic_trunk_close
+                }
         }
 
         AppConstants.ALARM -> iconId = R.drawable.ic_alarm
         AppConstants.ENGINE -> iconId = R.drawable.ic_ignition
-
     }
     return iconId
 }

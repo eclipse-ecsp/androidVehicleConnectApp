@@ -65,7 +65,7 @@ object AppConstants {
     internal const val PLEASE_WAIT = "Please wait"
     internal const val PROCESSED_FAILED = "PROCESSED_FAILED"
 
-    //alert types
+    // alert types
     const val ALERT_CURFEW = "CurfewViolation"
     const val ALERT_BOUNDARY = "GeoFence"
     const val ALERT_IDLE = "Idle"
@@ -74,7 +74,7 @@ object AppConstants {
     const val ALERT_TOW = "Tow"
     const val ALERT_ACCIDENT = "Collisions"
     const val ALERT_DISTURBANCE = "Disturbance"
-    const val ALERT_BREAK_IN_WARNING = "BreakInWarning"
+    private const val ALERT_BREAK_IN_WARNING = "BreakInWarning"
     const val ALERT_LOW_BATTERY = "LowBattery"
     const val ALERT_IMPACT_DETECTION = "Impact"
     const val ALERT_LOW_FUEL = "LowFuel"
@@ -87,51 +87,46 @@ object AppConstants {
     const val GLOBAL_DOOR_LOCK = "GlobalDoorLockAlert"
     const val EPID_TPMS_ALERT = "EPIDTPMSAlert"
     const val SEATBELT_ALERT = "SeatBeltAlert"
-    const val ALERT_GENERIC_NOTIFICATION = "GenericNotificationEvent"
-    const val WINDOW_CURRENT_STATE = "WindowCurrentState"
+    private const val ALERT_GENERIC_NOTIFICATION = "GenericNotificationEvent"
+    private const val WINDOW_CURRENT_STATE = "WindowCurrentState"
+    const val VEHICLE_PROFILE = "VehicleProfile"
+    const val VEHICLE_EDIT_NAME = "VehicleEditName"
+    const val VEHICLE_EDIT_COLOR = "VehicleEditColor"
 
-    //generic constant
+    // generic constant
     const val SELECTED_DEVICE = "selected_device"
     const val EXTRA_MESSAGE = "message"
     const val EXTRA_ALERT = "alert"
     const val EXTRA_VEHICLE_ID = "vehicle_id"
 
-    val defaultRoValueList = ArrayList<RemoteOperationItem>().apply {
-        add(RemoteOperationItem.Window(CLOSED, WINDOWS, setStateIcon(CLOSED, WINDOWS)))
-        add(RemoteOperationItem.Light(OFF, LIGHT, setStateIcon(OFF, LIGHT)))
-        add(RemoteOperationItem.Alarm(OFF, ALARM, setStateIcon(OFF, ALARM)))
-        add(RemoteOperationItem.Door(LOCKED, DOOR, setStateIcon(LOCKED, DOOR)))
-        add(RemoteOperationItem.Engine(STOPPED, ENGINE, setStateIcon(STOPPED, ENGINE)))
-        add(RemoteOperationItem.Trunk(LOCKED, TRUNK, setStateIcon(LOCKED, TRUNK)))
-    }
-    val defaultRoValuesList = listOf(
-        RemoteOperationItem.Window(CLOSED, WINDOWS, setStateIcon(CLOSED, WINDOWS)),
-        RemoteOperationItem.Light(OFF, LIGHT, setStateIcon(OFF, LIGHT)),
-        RemoteOperationItem.Alarm(OFF, ALARM, setStateIcon(OFF, ALARM)),
-        RemoteOperationItem.Door(LOCKED, DOOR, setStateIcon(LOCKED, DOOR)),
-        RemoteOperationItem.Engine(STOPPED, ENGINE, setStateIcon(STOPPED, ENGINE)),
-        RemoteOperationItem.Trunk(LOCKED, TRUNK, setStateIcon(LOCKED, TRUNK))
-    )
+    val defaultRoValuesList =
+        listOf(
+            RemoteOperationItem.Window(CLOSED, WINDOWS, setStateIcon(CLOSED, WINDOWS)),
+            RemoteOperationItem.Light(OFF, LIGHT, setStateIcon(OFF, LIGHT)),
+            RemoteOperationItem.Alarm(OFF, ALARM, setStateIcon(OFF, ALARM)),
+            RemoteOperationItem.Door(LOCKED, DOOR, setStateIcon(LOCKED, DOOR)),
+            RemoteOperationItem.Engine(STOPPED, ENGINE, setStateIcon(STOPPED, ENGINE)),
+            RemoteOperationItem.Trunk(LOCKED, TRUNK, setStateIcon(LOCKED, TRUNK)),
+        )
 
-
-
-    val ALERT_TYPES = listOf(
-        ALERT_CURFEW,
-        ALERT_BOUNDARY,
-        ALERT_SPEED,
-        ALERT_DONGLE_STATUS,
-        ALERT_TOW,
-        ALERT_LOW_FUEL,
-        ALERT_IDLE,
-        ALERT_DISTURBANCE,
-        ALERT_FIRMWARE_UPGRADE,
-        ALERT_FIRMWARE_DOWNLOADED,
-        ALERT_BREAK_IN_WARNING,
-        GLOBAL_DOOR_LOCK,
-        SEATBELT_ALERT,
-        EPID_TPMS_ALERT,
-        ALERT_GENERIC_NOTIFICATION
-    )
+    val ALERT_TYPES =
+        listOf(
+            ALERT_CURFEW,
+            ALERT_BOUNDARY,
+            ALERT_SPEED,
+            ALERT_DONGLE_STATUS,
+            ALERT_TOW,
+            ALERT_LOW_FUEL,
+            ALERT_IDLE,
+            ALERT_DISTURBANCE,
+            ALERT_FIRMWARE_UPGRADE,
+            ALERT_FIRMWARE_DOWNLOADED,
+            ALERT_BREAK_IN_WARNING,
+            GLOBAL_DOOR_LOCK,
+            SEATBELT_ALERT,
+            EPID_TPMS_ALERT,
+            ALERT_GENERIC_NOTIFICATION,
+        )
 
     private const val SHARED_PREF = "shared_pref"
     private const val USER_PROFILE = "user_profile"
@@ -142,7 +137,10 @@ object AppConstants {
         return sharedPref?.getString(USER_PROFILE, "").toString()
     }
 
-    fun setUserProfile(activity: Activity?, value: String?) {
+    fun setUserProfile(
+        activity: Activity?,
+        value: String?,
+    ) {
         val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             putString(USER_PROFILE, value)
@@ -150,17 +148,20 @@ object AppConstants {
         }
     }
 
-    fun removeAll(activity: Activity?){
+    fun removeAll(activity: Activity?)  {
         val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         sharedPref.edit().clear().apply()
     }
 
-    fun getVehicleList(activity: Activity?): String{
+    fun getVehicleList(activity: Activity?): String  {
         val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         return sharedPref?.getString(VEHICLE_LIST, "{}").toString()
     }
 
-    fun setVehicleList(activity: Activity?, value: String?) {
+    fun setVehicleList(
+        activity: Activity?,
+        value: String?,
+    ) {
         val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             putString(VEHICLE_LIST, value)
@@ -168,12 +169,15 @@ object AppConstants {
         }
     }
 
-    fun getWindowCurrentState(activity: Activity?): String{
+    fun getWindowCurrentState(activity: Activity?): String  {
         val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
         return sharedPref?.getString(WINDOW_CURRENT_STATE, "Closed").toString()
     }
 
-    fun setWindowCurrentState(activity: Activity?, value: String?) {
+    fun setWindowCurrentState(
+        activity: Activity?,
+        value: String?,
+    ) {
         val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
             putString(WINDOW_CURRENT_STATE, value)

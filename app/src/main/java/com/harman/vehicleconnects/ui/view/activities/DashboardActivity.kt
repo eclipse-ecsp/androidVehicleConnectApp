@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.activities
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,7 +39,6 @@ import com.harman.androidvehicleconnectsdk.notificationservice.model.AlertData
 import com.harman.androidvehicleconnectsdk.roservice.model.RemoteOperationState
 import com.harman.androidvehicleconnectsdk.userservice.model.UserProfile
 import com.harman.vehicleconnects.helper.AppConstants
-import com.harman.vehicleconnects.helper.AppConstants.defaultRoValueList
 import com.harman.vehicleconnects.helper.AppConstants.defaultRoValuesList
 import com.harman.vehicleconnects.helper.AppConstants.getUserProfile
 import com.harman.vehicleconnects.helper.fromJson
@@ -42,22 +56,11 @@ import com.harman.vehicleconnects.ui.view.composes.dashboardcompose.BottomNaviga
 import com.harman.vehicleconnects.ui.view.composes.dashboardcompose.ShowConfirmationDialogBox
 import com.harman.vehicleconnects.ui.view.composes.dashboardcompose.mainCompose
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * Dashboard activity class used to do UI for dashboard activities, which contains all the bottom menu.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ */
 class DashboardActivity : BaseAppActivity() {
     private val dashboardVM: DashboardVM by lazy {
         AppViewModelFactory(this@DashboardActivity).create(DashboardVM::class.java)
@@ -69,12 +72,13 @@ class DashboardActivity : BaseAppActivity() {
         AppViewModelFactory(this@DashboardActivity).create(NotificationVM::class.java)
     }
     private var showBottomSheet: MutableState<Triple<Boolean, String, String>>? = null
-    private var showVehicleList = mutableStateOf(
-        Pair<Boolean, ArrayList<VehicleProfileModel?>>(
-            false,
-            arrayListOf()
+    private var showVehicleList =
+        mutableStateOf(
+            Pair<Boolean, ArrayList<VehicleProfileModel?>>(
+                false,
+                arrayListOf(),
+            ),
         )
-    )
     private lateinit var navController: NavHostController
     private var isProgressBarLoading: MutableState<Boolean>? = null
     private var lazyStaggeredGridList = mutableStateOf(ArrayList(defaultRoValuesList))
@@ -86,6 +90,7 @@ class DashboardActivity : BaseAppActivity() {
     private val alertList = mutableStateOf<ArrayList<AlertData>>(arrayListOf())
     private var notifyRoUpdate = mutableStateOf(0)
     private var selectedVehicleIndex: MutableState<Int>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         remoteOperationVM.clickedOnCheckRoRequest().observe(this@DashboardActivity) {
@@ -101,9 +106,11 @@ class DashboardActivity : BaseAppActivity() {
         super.onResume()
         setContent {
             remoteOperationVM.getRoHistoryData().observeAsState().value.let {
-                if(isInternetAvailable(this)) {
+                if (isInternetAvailable(this)) {
                     if (it != null) getRoHistory(it)
-                } else toastError(this, "No internet connectivity")
+                } else {
+                    toastError(this, "No internet connectivity")
+                }
             }
 
             val userProfile = Gson().fromJson<UserProfile?>(getUserProfile(this))
@@ -114,15 +121,16 @@ class DashboardActivity : BaseAppActivity() {
             isProgressBarLoading = remember { mutableStateOf(true) }
             openConfirmationDialog = remember { mutableStateOf(false) }
             navController = rememberNavController()
-            selectedVehicleIndex = remember {
-                mutableStateOf(-1)
-            }
+            selectedVehicleIndex =
+                remember {
+                    mutableStateOf(-1)
+                }
             processVehicleList(
                 Gson().fromJson(
                     AppConstants.getVehicleList(
-                        this@DashboardActivity
-                    )
-                )
+                        this@DashboardActivity,
+                    ),
+                ),
             )
             LaunchedEffect(Unit) {
                 dashboardVM.fetchAssociateDeviceList()
@@ -148,9 +156,11 @@ class DashboardActivity : BaseAppActivity() {
                             title.value?.let {
                                 TopBar(it) { onBackPressedDispatcher.onBackPressed() }
                             }
-                        }, bottomBar = {
+                        },
+                        bottomBar = {
                             BottomNavigationBar(navController = navController)
-                        }, content = { padding ->
+                        },
+                        content = { padding ->
                             mainCompose(
                                 this,
                                 padding = padding,
@@ -169,9 +179,9 @@ class DashboardActivity : BaseAppActivity() {
                                 alertList,
                                 notifyRoUpdate,
                                 selectedVehicleIndex,
-                                this@DashboardActivity
+                                this@DashboardActivity,
                             ) { launchActivity(this, DeviceAssociationActivity::class.java) }
-                        }
+                        },
                     )
                 }
                 if (openConfirmationDialog != null && openConfirmationDialog!!.value) {
@@ -186,11 +196,16 @@ class DashboardActivity : BaseAppActivity() {
             vehicleProfileDataList.value = hashMap
             if (ArrayList(hashMap.keys).isNotEmpty()) {
                 notificationVM.updatingVehicleDetails(
-                    remoteOperationVM, selectedVehicleIndex,
-                    selectedVehicleId, showVehicleList,
-                    navController, ArrayList(hashMap.values), ArrayList(hashMap.keys), hashMap
+                    remoteOperationVM,
+                    selectedVehicleIndex,
+                    selectedVehicleId,
+                    showVehicleList,
+                    navController,
+                    ArrayList(hashMap.values),
+                    ArrayList(hashMap.keys),
+                    hashMap,
                 )
-            }/*else launchActivity(this, DeviceAssociationActivity::class.java)*/
+            } // else launchActivity(this, DeviceAssociationActivity::class.java)
         }
     }
 
@@ -209,7 +224,7 @@ class DashboardActivity : BaseAppActivity() {
     private fun checkRoRequestStatus(
         vehicleId: String,
         roRequestId: String,
-        isFromLoop: Boolean
+        isFromLoop: Boolean,
     ) {
         remoteOperationVM.checkRoRequestStatus(
             this@DashboardActivity,
@@ -220,21 +235,25 @@ class DashboardActivity : BaseAppActivity() {
             isProgressBarLoading,
             lazyStaggeredGridList,
             notifyRoUpdate,
-            isFromLoop
+            isFromLoop,
         )
     }
 
     private fun updateROState(
         remoteOperationState: RemoteOperationState,
         percentage: Int? = null,
-        duration: Int? = null
+        duration: Int? = null,
     ) {
         isProgressBarLoading?.value = true
         remoteOperationVM.updateRoState(
-            this@DashboardActivity, this@DashboardActivity,
-            userId ?: "", selectedVehicleId?.value?.first ?: "",
-            remoteOperationState, isProgressBarLoading,
-            percentage, duration
+            this@DashboardActivity,
+            this@DashboardActivity,
+            userId ?: "",
+            selectedVehicleId?.value?.first ?: "",
+            remoteOperationState,
+            isProgressBarLoading,
+            percentage,
+            duration,
         )
     }
 
@@ -242,26 +261,31 @@ class DashboardActivity : BaseAppActivity() {
         isProgressBarLoading?.value = true
         remoteOperationVM.getRemoteOperationHistory(
             this@DashboardActivity,
-            this@DashboardActivity, isProgressBarLoading, lazyStaggeredGridList,
-            notifyRoUpdate, userId ?: "", vehicleId
+            this@DashboardActivity,
+            isProgressBarLoading,
+            lazyStaggeredGridList,
+            notifyRoUpdate,
+            userId ?: "",
+            vehicleId,
         )
     }
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (!isGranted) {
-            Toast.makeText(this, "Notifications permission not granted", Toast.LENGTH_LONG)
-                .show()
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted: Boolean ->
+            if (!isGranted) {
+                Toast.makeText(this, "Notifications permission not granted", Toast.LENGTH_LONG)
+                    .show()
+            }
         }
-    }
 
     private fun askNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-            && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
             != PackageManager.PERMISSION_GRANTED
-        )
+        ) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
-
 }

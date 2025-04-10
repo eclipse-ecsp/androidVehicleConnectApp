@@ -1,8 +1,4 @@
 package com.harman.vehicleconnects.models.routes
-
-import com.harman.vehicleconnects.helper.AppConstants.DEVICE_ASSOCIATION
-import com.harman.vehicleconnects.helper.AppConstants.ENTER_IMEI
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -19,7 +15,18 @@ import com.harman.vehicleconnects.helper.AppConstants.ENTER_IMEI
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-sealed class DeviceAssociationRoute(route: String){
+import com.harman.vehicleconnects.helper.AppConstants.DEVICE_ASSOCIATION
+import com.harman.vehicleconnects.helper.AppConstants.ENTER_IMEI
+
+/**
+ * Sealed class used to handle the Device association screen
+ *
+ * @constructor
+ *
+ * @param route screen name
+ */
+sealed class DeviceAssociationRoute(route: String) {
     data object InstallDeviceScreen : DeviceAssociationRoute(DEVICE_ASSOCIATION)
+
     data object EnterIMEIScreen : DeviceAssociationRoute(ENTER_IMEI)
 }

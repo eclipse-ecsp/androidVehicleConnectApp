@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.composes.notificationcompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +44,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
+import com.harman.androidvehicleconnectsdk.notificationservice.model.AlertData
 import com.harman.vehicleconnects.R
+import com.harman.vehicleconnects.helper.AppConstants
 import com.harman.vehicleconnects.helper.AppConstants.ALERT_ACCIDENT
 import com.harman.vehicleconnects.helper.AppConstants.ALERT_AIRBAG_DEPLOY
 import com.harman.vehicleconnects.helper.AppConstants.ALERT_BOUNDARY
@@ -50,38 +67,22 @@ import com.harman.vehicleconnects.helper.AppConstants.ALERT_TOW
 import com.harman.vehicleconnects.helper.AppConstants.EPID_TPMS_ALERT
 import com.harman.vehicleconnects.helper.AppConstants.GLOBAL_DOOR_LOCK
 import com.harman.vehicleconnects.helper.AppConstants.SEATBELT_ALERT
-import com.harman.vehicleconnects.ui.theme.Gray
-import com.harman.vehicleconnects.ui.theme.LightGray
-import com.harman.vehicleconnects.ui.theme.MildGray
-import com.harman.vehicleconnects.ui.theme.MildWhite
-import com.harman.androidvehicleconnectsdk.notificationservice.model.AlertData
-import com.harman.vehicleconnects.helper.AppConstants
 import com.harman.vehicleconnects.helper.convertISO8601TimeToMillis
 import com.harman.vehicleconnects.models.dataclass.VehicleProfileModel
 import com.harman.vehicleconnects.models.viewmodels.DashboardVM
 import com.harman.vehicleconnects.models.viewmodels.NotificationVM
-import com.harman.vehicleconnects.models.viewmodels.RemoteOperationVM
+import com.harman.vehicleconnects.ui.theme.Gray
+import com.harman.vehicleconnects.ui.theme.LightGray
+import com.harman.vehicleconnects.ui.theme.MildGray
+import com.harman.vehicleconnects.ui.theme.MildWhite
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * NotificationCompose contains Notification screen related compose functions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
-
+ */
 @Composable
 fun Activity.NotificationMainCompose(
     dashboardVM: DashboardVM,
@@ -90,9 +91,8 @@ fun Activity.NotificationMainCompose(
     isProgressBarLoading: MutableState<Boolean>?,
     vehicleProfileDataList: MutableState<HashMap<String, VehicleProfileModel?>>?,
     selectedVehicleId: MutableState<Pair<String, String>>?,
-    lifecycleOwner: LifecycleOwner
+    lifecycleOwner: LifecycleOwner,
 ) {
-
     LaunchedEffect(Unit) {
         dashboardVM.setTopBarTitle(getString(R.string.notification_text))
     }
@@ -103,7 +103,7 @@ fun Activity.NotificationMainCompose(
             vehicleProfileDataList,
             selectedVehicleId,
             alertList,
-            lifecycleOwner
+            lifecycleOwner,
         )
     }
 
@@ -111,68 +111,72 @@ fun Activity.NotificationMainCompose(
         val list = alertList.value
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             itemsIndexed(list) { _, item ->
                 Card(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .background(MildWhite)
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 3.dp
-                    )
+                    modifier =
+                        Modifier
+                            .padding(2.dp)
+                            .background(MildWhite)
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                    elevation =
+                        CardDefaults.cardElevation(
+                            defaultElevation = 3.dp,
+                        ),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .wrapContentHeight()
-                            .fillMaxWidth()
-                            .background(LightGray)
+                        modifier =
+                            Modifier
+                                .wrapContentHeight()
+                                .fillMaxWidth()
+                                .background(LightGray),
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .wrapContentWidth()
-                                    .padding(20.dp)
-                                    .background(Color.White),
+                                modifier =
+                                    Modifier
+                                        .fillMaxHeight()
+                                        .wrapContentWidth()
+                                        .padding(20.dp)
+                                        .background(Color.White),
                                 horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(setItemIcon(item)),
                                     contentDescription = null,
                                     modifier = Modifier.padding(start = 15.dp, end = 20.dp).testTag("notification_item_icon_tag"),
-                                    tint = Gray
+                                    tint = Gray,
                                 )
 
                                 Column(
-                                    modifier = Modifier
-                                        .wrapContentHeight()
-                                        .fillMaxWidth()
-                                        .background(Color.White)
+                                    modifier =
+                                        Modifier
+                                            .wrapContentHeight()
+                                            .fillMaxWidth()
+                                            .background(Color.White),
                                 ) {
-
                                     Text(
                                         text = item.alertType ?: "No Alert Type Available",
                                         color = Color.Black,
                                         fontSize = 18.sp,
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp).testTag("notification_type_text_tag")
+                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp).testTag("notification_type_text_tag"),
                                     )
 
                                     Text(
                                         text = item.alertMessage ?: "",
                                         color = Color.Black,
                                         fontSize = 16.sp,
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp).testTag("notification_message_text_tag")
+                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp).testTag("notification_message_text_tag"),
                                     )
 
                                     Text(
                                         text = if (item.timestamp != null) convertToTime(item.timestamp!!) else "",
                                         color = MildGray,
                                         fontSize = 15.sp,
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp).testTag("notification_timestamp_text_tag")
+                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp).testTag("notification_timestamp_text_tag"),
                                     )
                                 }
                             }
@@ -223,14 +227,21 @@ private fun getAlertHistoryData(
     vehicleProfileDataList: MutableState<HashMap<String, VehicleProfileModel?>>?,
     selectedVehicleId: MutableState<Pair<String, String>>?,
     alertList: MutableState<ArrayList<AlertData>>,
-    lifecycleOwner: LifecycleOwner
+    lifecycleOwner: LifecycleOwner,
 ) {
     isProgressBarLoading?.value = true
     val since =
         convertISO8601TimeToMillis(vehicleProfileDataList?.value?.get(selectedVehicleId?.value?.first)?.associatedDevice?.mAssociatedOn)
     val until = System.currentTimeMillis()
     selectedVehicleId?.value?.first?.let { deviceId ->
-        notificationVM.getAlertHistory(lifecycleOwner, isProgressBarLoading,deviceId,
-            AppConstants.ALERT_TYPES, alertList, since, until)
+        notificationVM.getAlertHistory(
+            lifecycleOwner,
+            isProgressBarLoading,
+            deviceId,
+            AppConstants.ALERT_TYPES,
+            alertList,
+            since,
+            until,
+        )
     }
 }

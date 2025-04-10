@@ -1,5 +1,4 @@
 package com.harman.vehicleconnects.models.routes
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -16,8 +15,19 @@ package com.harman.vehicleconnects.models.routes
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import com.harman.vehicleconnects.helper.AppConstants.VEHICLE_EDIT_COLOR
+import com.harman.vehicleconnects.helper.AppConstants.VEHICLE_EDIT_NAME
+import com.harman.vehicleconnects.helper.AppConstants.VEHICLE_PROFILE
+
+/**
+ * Sealed class used to handle the Vehicle profile screen
+ *
+ * @property route screen name
+ */
 sealed class VehicleProfileRoute(val route: String) {
-    data object VehicleProfile : VehicleProfileRoute("VehicleProfile")
-    data object VehicleEditName : VehicleProfileRoute("VehicleEditName")
-    data object VehicleEditColor : VehicleProfileRoute("VehicleEditColor")
+    data object VehicleProfile : VehicleProfileRoute(VEHICLE_PROFILE)
+
+    data object VehicleEditName : VehicleProfileRoute(VEHICLE_EDIT_NAME)
+
+    data object VehicleEditColor : VehicleProfileRoute(VEHICLE_EDIT_COLOR)
 }

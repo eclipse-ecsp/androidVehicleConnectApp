@@ -1,16 +1,4 @@
 package com.harman.vehicleconnects.repository
-
-import android.app.Activity
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
-import com.harman.androidvehicleconnectsdk.userservice.model.UserProfile
-import com.harman.androidvehicleconnectsdk.userservice.service.UserServiceInterface
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -27,16 +15,38 @@ import kotlinx.coroutines.launch
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.app.Activity
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
+import com.harman.androidvehicleconnectsdk.userservice.model.UserProfile
+import com.harman.androidvehicleconnectsdk.userservice.service.UserServiceInterface
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+/**
+ * Login Repository class is to perform all network calls related to login feature
+ *
+ * @property activity
+ */
 class LoginRepository(val activity: Activity) {
-    private val userServiceInterface : UserServiceInterface by lazy {
+    private val userServiceInterface: UserServiceInterface by lazy {
         UserServiceInterface.authService(activity)
     }
 
+    /**
+     * Function is to get the user profile data using SDK Api
+     *
+     * @return [MutableLiveData] of [UserProfile]'s [CustomMessage]
+     */
     fun fetchUserProfileData(): MutableLiveData<CustomMessage<UserProfile>> {
-        val data =  MutableLiveData<CustomMessage<UserProfile>>()
-        val exception = CoroutineExceptionHandler { _, exception ->
-            Log.e("User Profile API: ", exception.cause.toString())
-        }
+        val data = MutableLiveData<CustomMessage<UserProfile>>()
+        val exception =
+            CoroutineExceptionHandler { _, exception ->
+                Log.e("User Profile API: ", exception.cause.toString())
+            }
         CoroutineScope(Dispatchers.IO).launch(exception) {
             userServiceInterface.fetchUserProfile {
                 data.postValue(it)

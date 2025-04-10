@@ -20,7 +20,12 @@ import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class AppViewModelFactory(private val activity: Activity, ) : ViewModelProvider.Factory {
+/**
+ * Represents the View model factory contains all the ViewModels
+ *
+ * @property activity activity reference
+ */
+class AppViewModelFactory(private val activity: Activity) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when (modelClass) {

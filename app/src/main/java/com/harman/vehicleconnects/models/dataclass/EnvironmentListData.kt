@@ -1,7 +1,4 @@
 package com.harman.vehicleconnects.models.dataclass
-
-import com.harman.androidvehicleconnectsdk.environment.Environment
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -18,5 +15,11 @@ import com.harman.androidvehicleconnectsdk.environment.Environment
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import com.harman.androidvehicleconnectsdk.environment.Environment
 
+/**
+ * Data Class represents to hold the environment data list
+ *
+ * @property environmentList
+ */
 data class EnvironmentListData(var environmentList: MutableList<Environment>)

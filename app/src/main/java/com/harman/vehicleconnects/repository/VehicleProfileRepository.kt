@@ -1,16 +1,4 @@
 package com.harman.vehicleconnects.repository
-
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.TerminateDeviceData
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.PostVehicleAttributeData
-import com.harman.androidvehicleconnectsdk.vehicleservice.service.VehicleServiceInterface
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -27,34 +15,63 @@ import kotlinx.coroutines.launch
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.TerminateDeviceData
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.PostVehicleAttributeData
+import com.harman.androidvehicleconnectsdk.vehicleservice.service.VehicleServiceInterface
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+/**
+ *Vehicle Profile repository class is to perform all network calls related to vehicle profile activity
+ */
 class VehicleProfileRepository {
     private val vehicleServiceInterface: VehicleServiceInterface by lazy {
         VehicleServiceInterface.vehicleServiceInterface()
     }
 
+    /**
+     * Function is to update the vehicle profile data
+     *
+     * @param deviceId as [String]
+     * @param postVehicleAttributeData [PostVehicleAttributeData]
+     * @return [MutableLiveData] of [CustomMessage]
+     */
     fun updateVehicleProfileData(
         deviceId: String,
-        postVehicleAttributeData: PostVehicleAttributeData
+        postVehicleAttributeData: PostVehicleAttributeData,
     ): MutableLiveData<CustomMessage<String>> {
         val data = MutableLiveData<CustomMessage<String>>()
-        val exception = CoroutineExceptionHandler { _, exception ->
-            Log.e("Device association list API: ", exception.cause.toString())
-        }
+        val exception =
+            CoroutineExceptionHandler { _, exception ->
+                Log.e("Device association list API: ", exception.cause.toString())
+            }
         CoroutineScope(Dispatchers.IO).launch(exception) {
-            vehicleServiceInterface.updateVehicleProfile(deviceId, postVehicleAttributeData){
+            vehicleServiceInterface.updateVehicleProfile(deviceId, postVehicleAttributeData) {
                 data.postValue(it)
             }
         }
         return data
     }
 
-    fun terminateVehicle(terminateDeviceData: TerminateDeviceData): MutableLiveData<CustomMessage<String>>{
+    /**
+     * Function is to terminate the vehicle using SDK Api
+     *
+     * @param terminateDeviceData [TerminateDeviceData]
+     * @return [MutableLiveData] of [CustomMessage]
+     */
+    fun terminateVehicle(terminateDeviceData: TerminateDeviceData): MutableLiveData<CustomMessage<String>>  {
         val data = MutableLiveData<CustomMessage<String>>()
-        val exception = CoroutineExceptionHandler { _, exception ->
-            Log.e("Device termination API: ", exception.cause.toString())
-        }
+        val exception =
+            CoroutineExceptionHandler { _, exception ->
+                Log.e("Device termination API: ", exception.cause.toString())
+            }
         CoroutineScope(Dispatchers.IO).launch(exception) {
-            vehicleServiceInterface.terminateVehicle(terminateDeviceData){
+            vehicleServiceInterface.terminateVehicle(terminateDeviceData) {
                 data.postValue(it)
             }
         }

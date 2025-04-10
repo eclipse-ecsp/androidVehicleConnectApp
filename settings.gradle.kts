@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "androidVehicleConnectApp"
 include(":app")
- 

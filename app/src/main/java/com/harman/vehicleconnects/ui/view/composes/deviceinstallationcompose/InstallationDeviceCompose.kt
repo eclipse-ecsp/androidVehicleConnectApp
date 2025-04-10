@@ -1,8 +1,21 @@
 package com.harman.vehicleconnects.ui.view.composes.deviceinstallationcompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,7 +31,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,61 +51,51 @@ import androidx.navigation.NavController
 import com.harman.vehicleconnects.R
 import com.harman.vehicleconnects.helper.AppConstants
 import com.harman.vehicleconnects.models.viewmodels.DeviceAssociationVM
-import com.harman.vehicleconnects.ui.view.composes.TextFieldState
 import com.harman.vehicleconnects.ui.theme.Black
 import com.harman.vehicleconnects.ui.theme.DarkGray
 import com.harman.vehicleconnects.ui.theme.LightBlue
 import com.harman.vehicleconnects.ui.theme.LightGray
 import com.harman.vehicleconnects.ui.theme.White
+import com.harman.vehicleconnects.ui.view.composes.TextFieldState
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * InstallationDeviceCompose file contains device installation screen compose functions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ */
 
 @Composable
 fun Activity.InstallDeviceMainScreenCompose(
     content: PaddingValues,
     navController: NavController,
-    deviceAssociationVM: DeviceAssociationVM?
+    deviceAssociationVM: DeviceAssociationVM?,
 ) {
     LaunchedEffect(Unit) {
         deviceAssociationVM?.setTopBarTitle(getString(R.string.device_association_text))
     }
     Column(
-        modifier = Modifier
-            .padding(content)
-            .background(White)
+        modifier =
+            Modifier
+                .padding(content)
+                .background(White),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(White),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(White),
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             InstallDeviceImageTextCompose()
 
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 FindObdPortCompose()
                 NextButtonCompose {
-                    //do click action
+                    // do click action
                     navController.navigate(AppConstants.ENTER_IMEI) {
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
@@ -109,25 +112,30 @@ fun Activity.InstallDeviceImageTextCompose() {
         painter = painterResource(id = R.drawable.obd_port_img),
         contentDescription = null,
         contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
     )
     Text(
-        text = getString(R.string.install_device_text), color = Black,
+        text = getString(R.string.install_device_text),
+        color = Black,
         fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        textAlign = TextAlign.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+        textAlign = TextAlign.Center,
     )
     Text(
-        text = getString(R.string.install_device_sub_text), color = DarkGray,
-        modifier = Modifier
-            .wrapContentWidth()
-            .wrapContentHeight()
-            .padding(10.dp),
-        textAlign = TextAlign.Center
+        text = getString(R.string.install_device_sub_text),
+        color = DarkGray,
+        modifier =
+            Modifier
+                .wrapContentWidth()
+                .wrapContentHeight()
+                .padding(10.dp),
+        textAlign = TextAlign.Center,
     )
 }
 
@@ -136,50 +144,59 @@ fun DotImageCompose() {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
     ) {
         Image(
             painter = painterResource(R.drawable.filled_dot_img),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(5.dp)
+            modifier =
+                Modifier
+                    .padding(5.dp),
         )
         Image(
             painter = painterResource(R.drawable.unfilled_dot_img),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .padding(5.dp)
+            modifier =
+                Modifier
+                    .padding(5.dp),
         )
     }
 }
 
 @Composable
-fun Activity.EnterImeiScreenCompose(content: PaddingValues, deviceAssociationVM: DeviceAssociationVM? ) {
+fun Activity.EnterImeiScreenCompose(
+    content: PaddingValues,
+    deviceAssociationVM: DeviceAssociationVM?,
+) {
     LaunchedEffect(Unit) {
         deviceAssociationVM?.setTopBarTitle(getString(R.string.enter_imei_text))
     }
     val loading = deviceAssociationVM?.getLoadingStatus()?.observeAsState()
     Column(
-        modifier = Modifier
-            .padding(content)
-            .background(White)
+        modifier =
+            Modifier
+                .padding(content)
+                .background(White),
     ) {
         val inputValue = remember { TextFieldState() }
         TextFieldCompose(inputValue)
-        Divider(
-            color = LightGray, thickness = 2.dp, modifier = Modifier
+        HorizontalDivider(
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp)
+                .padding(5.dp),
+            thickness = 2.dp,
+            color = LightGray
         )
         loading?.value?.let { ProgressBar(it) }
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             EnterIMEINextButtonCompose {
                 if (inputValue.textInput.isNotEmpty()) {
@@ -187,8 +204,9 @@ fun Activity.EnterImeiScreenCompose(content: PaddingValues, deviceAssociationVM:
                     deviceAssociationVM?.triggerImeiVerification(inputValue.textInput)
                 } else {
                     Toast.makeText(
-                        this@EnterImeiScreenCompose, "Enter IMEI number",
-                        Toast.LENGTH_LONG
+                        this@EnterImeiScreenCompose,
+                        "Enter IMEI number",
+                        Toast.LENGTH_LONG,
                     ).show()
                 }
             }
@@ -200,12 +218,14 @@ fun Activity.EnterImeiScreenCompose(content: PaddingValues, deviceAssociationVM:
 fun Activity.NextButtonCompose(onClick: () -> Unit) {
     TextButton(
         onClick = { onClick() },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = LightBlue
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp).testTag("next_btn_tag"),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = LightBlue,
+            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp).testTag("next_btn_tag"),
         shape = RectangleShape,
     ) {
         Text(getString(R.string.next_btn_text), color = White)
@@ -215,19 +235,21 @@ fun Activity.NextButtonCompose(onClick: () -> Unit) {
 @Composable
 fun Activity.FindObdPortCompose() {
     Text(
-        text = getString(R.string.find_obdii_port_text), color = LightBlue,
+        text = getString(R.string.find_obdii_port_text),
+        color = LightBlue,
         fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp).testTag("help_me_obdii_port_tag")
-            .clickable {
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp).testTag("help_me_obdii_port_tag")
+                .clickable {
                 /*startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("")
                     )
                 )*/
-            },
-        textAlign = TextAlign.Center
+                },
+        textAlign = TextAlign.Center,
     )
 }

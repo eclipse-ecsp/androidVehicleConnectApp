@@ -43,16 +43,18 @@ import com.harman.vehicleconnects.helper.dataToJson
 import com.harman.vehicleconnects.models.dataclass.EnvironmentListData
 import com.harman.vehicleconnects.models.viewmodels.AppViewModelFactory
 import com.harman.vehicleconnects.models.viewmodels.LoginActivityVM
-import com.harman.vehicleconnects.ui.theme.White
 import com.harman.vehicleconnects.ui.view.composes.deviceinstallationcompose.ProgressBar
 import com.harman.vehicleconnects.ui.view.composes.logincompose.EnvironmentSpinner
 import com.harman.vehicleconnects.ui.view.composes.logincompose.ImageLogoCompose
 import com.harman.vehicleconnects.ui.view.composes.logincompose.SignInButton
-import com.harman.vehicleconnects.ui.view.composes.logincompose.SignUpButton
 
+/**
+ * LoginActivity Class is to display login UI and perform the login actions
+ *
+ */
 class LoginActivity : ComponentActivity() {
     private var loginActivityVM: LoginActivityVM? = null
-    private var userServiceInterface : UserServiceInterface ?=null
+    private var userServiceInterface: UserServiceInterface? = null
     private var launcher: ActivityResultLauncher<Intent>? = null
     private var isProgressBarLoading: MutableState<Boolean>? = null
 
@@ -63,7 +65,7 @@ class LoginActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(!AppManager.isLoggedIn()) {
+        if (!AppManager.isLoggedIn()) {
             userServiceInterface = UserServiceInterface.authService(this)
             loginActivityVM =
                 AppViewModelFactory(this@LoginActivity).create(LoginActivityVM::class.java)
@@ -74,39 +76,44 @@ class LoginActivity : ComponentActivity() {
                     .let { loginActivityVM?.configureEnvironment(it) }
             }
 
-            launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { result: ActivityResult ->
-                when (result.resultCode) {
-                    SIGN_IN_REQUEST_CODE -> {
-                        val customMessage =
-                            result.data?.let { AppManager.authResponseFromIntent(it) }
-                        if (customMessage?.status!!.requestStatus) {
-                            isProgressBarLoading?.value = true
-                            fetchUserProfileData()
-                        } else if (customMessage.error != null)
+            launcher =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                    when (result.resultCode) {
+                        SIGN_IN_REQUEST_CODE -> {
+                            val customMessage =
+                                result.data?.let { AppManager.authResponseFromIntent(it) }
+                            if (customMessage?.status!!.requestStatus) {
+                                isProgressBarLoading?.value = true
+                                fetchUserProfileData()
+                            } else if (customMessage.error != null) {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    customMessage.error?.message,
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                            }
+                        }
+
+                        SIGN_UP_REQUEST_CODE -> {
+                            val customMessage =
+                                result.data?.let { AppManager.authResponseFromIntent(it) }
                             Toast.makeText(
                                 this@LoginActivity,
-                                customMessage.error?.message,
-                                Toast.LENGTH_LONG
+                                if (customMessage?.status!!.requestStatus) {
+                                    "Signed Up successfully"
+                                } else {
+                                    customMessage.error?.message
+                                },
+                                Toast.LENGTH_LONG,
                             ).show()
-                    }
-
-                    SIGN_UP_REQUEST_CODE -> {
-                        val customMessage =
-                            result.data?.let { AppManager.authResponseFromIntent(it) }
-                        Toast.makeText(
-                            this@LoginActivity,
-                            if (customMessage?.status!!.requestStatus) "Signed Up successfully"
-                            else customMessage.error?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
+                        }
                     }
                 }
-            }
             setContent {
-                isProgressBarLoading = remember {
-                    mutableStateOf(false)
-                }
+                isProgressBarLoading =
+                    remember {
+                        mutableStateOf(false)
+                    }
                 MaterialTheme {
                     ImageLogoCompose()
                     EnvironmentSpinner(
@@ -114,15 +121,16 @@ class LoginActivity : ComponentActivity() {
                         preselected = envList.environmentList.first(),
                         onSelectionChanged = {
                             loginActivityVM?.configureEnvironment(it)
-                        }
+                        },
                     )
                     isProgressBarLoading?.value?.let { ProgressBar(loading = it) }
                     SignInAndUpButtonCompose()
                 }
             }
-        } else{
-            launchActivity()
-        }
+        } else
+            {
+                launchActivity()
+            }
     }
 
     @Composable
@@ -130,7 +138,7 @@ class LoginActivity : ComponentActivity() {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             SignInButton {
                 launchSignInRequest()
@@ -141,11 +149,11 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
-    private fun launchSignInRequest(){
+    private fun launchSignInRequest()  {
         loginActivityVM?.signInRequest(userServiceInterface!!, SIGN_IN_REQUEST_CODE, launcher)
     }
 
-    private fun launchSignUpRequest(){
+    private fun launchSignUpRequest()  {
         loginActivityVM?.signUpRequest(userServiceInterface!!, SIGN_UP_REQUEST_CODE, launcher)
     }
 

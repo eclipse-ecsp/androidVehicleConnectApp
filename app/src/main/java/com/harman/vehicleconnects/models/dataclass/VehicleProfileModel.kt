@@ -1,10 +1,4 @@
 package com.harman.vehicleconnects.models.dataclass
-
-import android.os.Parcelable
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.AssociatedDevice
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.VehicleDetailData
-import kotlinx.parcelize.Parcelize
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -21,8 +15,19 @@ import kotlinx.parcelize.Parcelize
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.os.Parcelable
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.AssociatedDevice
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.VehicleDetailData
+import kotlinx.parcelize.Parcelize
+
+/**
+ * Parcelize Data class used to hold the Vehicle profile details
+ *
+ * @property associatedDevice holds [AssociatedDevice] data
+ * @property vehicleDetailData holds [VehicleDetailData] data
+ */
 @Parcelize
 data class VehicleProfileModel(
     var associatedDevice: AssociatedDevice,
-    var vehicleDetailData: VehicleDetailData?
-): Parcelable
+    var vehicleDetailData: VehicleDetailData?,
+) : Parcelable

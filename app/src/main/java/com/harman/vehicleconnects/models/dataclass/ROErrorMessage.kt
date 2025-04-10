@@ -1,16 +1,12 @@
 package com.harman.vehicleconnects.models.dataclass
-
-import com.google.gson.annotations.SerializedName
-
-/**
+/********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ *  http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +14,16 @@ import com.google.gson.annotations.SerializedName
  * limitations under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+import com.google.gson.annotations.SerializedName
+
+/**
+ * Data class represents the error message
+ *
+ * @property message holds error message details
+ * @property detailedError holds detailed error data
  */
 data class ROErrorMessage(
     @SerializedName("message") val message: String,
-    @SerializedName("detailedErrorCode") val detailedError: String) {
-}
+    @SerializedName("detailedErrorCode") val detailedError: String,
+)

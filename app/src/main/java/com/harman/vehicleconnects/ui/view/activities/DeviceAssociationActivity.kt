@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.activities
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -19,24 +34,11 @@ import com.harman.vehicleconnects.ui.view.composes.TopBar
 import com.harman.vehicleconnects.ui.view.composes.deviceinstallationcompose.EnterImeiScreenCompose
 import com.harman.vehicleconnects.ui.view.composes.deviceinstallationcompose.InstallDeviceMainScreenCompose
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * Device association activity contains the device association feature
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ */
 class DeviceAssociationActivity : BaseAppActivity() {
-
     private lateinit var navController: NavHostController
     private var deviceAssociationVM: DeviceAssociationVM? = null
     private var vehicleServiceInterface = VehicleServiceInterface.vehicleServiceInterface()
@@ -45,7 +47,7 @@ class DeviceAssociationActivity : BaseAppActivity() {
         super.onCreate(savedInstanceState)
         deviceAssociationVM = AppViewModelFactory(this).create(DeviceAssociationVM::class.java)
 
-        deviceAssociationVM?.clickedOnVerifyImei()?.observe(this){
+        deviceAssociationVM?.clickedOnVerifyImei()?.observe(this) {
             triggerIMEIVerificationApi(it)
         }
 
@@ -59,7 +61,7 @@ class DeviceAssociationActivity : BaseAppActivity() {
                             onBackPressedDispatcher.onBackPressed()
                         }
                     }
-                }
+                },
             ) { content ->
                 NavHost(navController = navController, startDestination = DEVICE_ASSOCIATION) {
                     composable(DEVICE_ASSOCIATION) {
@@ -76,7 +78,7 @@ class DeviceAssociationActivity : BaseAppActivity() {
     private fun triggerIMEIVerificationApi(inputValue: String) {
         deviceAssociationVM?.verifyDeviceIMEI(
             vehicleServiceInterface,
-            inputValue
+            inputValue,
         )?.observe(this@DeviceAssociationActivity) {
             val successStatus = it?.status?.requestStatus ?: false
             if (successStatus) {
@@ -86,7 +88,7 @@ class DeviceAssociationActivity : BaseAppActivity() {
                 Toast.makeText(
                     this@DeviceAssociationActivity,
                     it?.error?.message,
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_LONG,
                 ).show()
             }
         }
@@ -104,7 +106,7 @@ class DeviceAssociationActivity : BaseAppActivity() {
                     Toast.makeText(
                         this@DeviceAssociationActivity,
                         it?.error?.message,
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     ).show()
                 }
             }
@@ -114,5 +116,4 @@ class DeviceAssociationActivity : BaseAppActivity() {
         startActivity(Intent(this@DeviceAssociationActivity, DashboardActivity::class.java))
         finish()
     }
-
 }

@@ -1,7 +1,4 @@
 package com.harman.vehicleconnects.models.routes
-
-import com.harman.vehicleconnects.R
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -18,8 +15,18 @@ import com.harman.vehicleconnects.R
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import com.harman.vehicleconnects.R
+
+/**
+ * Sealed class used to handle the Bottom navigation item
+ *
+ * @property route route value as string
+ * @property iconId drawable id
+ * @property label name of the item
+ */
 sealed class BottomNavItem(val route: String, val iconId: Int, val label: String) {
     data object RemoteOperation : BottomNavItem("RemoteOperation", R.drawable.ic_vehicle_selected, "Remote Operation")
+
     data object Settings : BottomNavItem("settings", R.drawable.ic_settings_selected, "Settings")
 //    data object Notification : BottomNavItem("notification", R.drawable.ic_notification, "Notifications")
 }

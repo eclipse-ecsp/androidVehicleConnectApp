@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.activities
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -36,22 +51,10 @@ import com.harman.vehicleconnects.ui.view.composes.TopBar
 import com.harman.vehicleconnects.ui.view.composes.deviceinstallationcompose.ProgressBar
 import com.harman.vehicleconnects.ui.view.composes.vehicleprofilecompose.VehicleProfileMainCompose
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * Vehicle Profile activity is used to hold the vehicle profile screen and actions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
+ */
 class VehicleProfileActivity : BaseAppActivity() {
     private lateinit var navController: NavHostController
     private val vehicleProfileVM: VehicleProfileVM by lazy {
@@ -61,6 +64,7 @@ class VehicleProfileActivity : BaseAppActivity() {
     private var vehicleProfileModel: VehicleProfileModel? = null
     private var inputValue: TextFieldState? = null
     private var openDialog: MutableState<Boolean>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vehicleProfileModel = intent.parcelable(AppConstants.SELECTED_DEVICE)
@@ -70,13 +74,15 @@ class VehicleProfileActivity : BaseAppActivity() {
         super.onResume()
         setContent {
             isProgressBarLoading = remember { mutableStateOf(false) }
-            inputValue = remember {
-                TextFieldState()
-            }
+            inputValue =
+                remember {
+                    TextFieldState()
+                }
             vehicleProfileVM.isSaveBtnClicked().observe(this) {
                 vehicleProfileModel?.associatedDevice?.mDeviceId?.let { it1 ->
                     updateVehicleProfileData(
-                        it1, it
+                        it1,
+                        it,
                     )
                 }
             }
@@ -87,9 +93,10 @@ class VehicleProfileActivity : BaseAppActivity() {
             }
             MaterialTheme {
                 navController = rememberNavController()
-                openDialog = remember {
-                    mutableStateOf(false)
-                }
+                openDialog =
+                    remember {
+                        mutableStateOf(false)
+                    }
                 val title = vehicleProfileVM.getTopBarTitle().observeAsState()
                 Surface(color = White) {
                     Scaffold(
@@ -102,7 +109,7 @@ class VehicleProfileActivity : BaseAppActivity() {
                         },
                         content = { padding ->
                             mainCompose(padding = padding, navController)
-                        }
+                        },
                     )
                 }
                 /*if (openDialog != null && openDialog!!.value) {
@@ -113,14 +120,18 @@ class VehicleProfileActivity : BaseAppActivity() {
     }
 
     @Composable
-    fun mainCompose(padding: PaddingValues, navController: NavHostController) {
+    fun mainCompose(
+        padding: PaddingValues,
+        navController: NavHostController,
+    ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(White)
-                .padding(padding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(White)
+                    .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Top,
         ) {
             NavHostContainer(navController)
             isProgressBarLoading?.value?.let {
@@ -140,7 +151,7 @@ class VehicleProfileActivity : BaseAppActivity() {
                     vehicleProfileModel,
                     vehicleProfileVM,
                     navController,
-                    openDialog
+                    openDialog,
                 )
             }
             /*composable(VehicleProfileRoute.VehicleEditName.route) {
@@ -156,7 +167,7 @@ class VehicleProfileActivity : BaseAppActivity() {
 
     private fun updateVehicleProfileData(
         deviceId: String,
-        postVehicleAttributeData: PostVehicleAttributeData
+        postVehicleAttributeData: PostVehicleAttributeData,
     ) {
         isProgressBarLoading?.value = true
         vehicleProfileVM.updateVehicleProfileData(deviceId, postVehicleAttributeData)
@@ -165,7 +176,7 @@ class VehicleProfileActivity : BaseAppActivity() {
                 Toast.makeText(
                     this@VehicleProfileActivity,
                     "Successfully updated",
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_LONG,
                 ).show()
             }
     }
@@ -179,28 +190,29 @@ class VehicleProfileActivity : BaseAppActivity() {
             vehicleProfileVM.terminateVehicle(
                 vehicleProfileModel?.associatedDevice?.mSerialNumber!!,
                 vehicleProfileModel?.associatedDevice?.mImei!!,
-                vehicleProfileModel?.associatedDevice?.mSerialNumber!!
+                vehicleProfileModel?.associatedDevice?.mSerialNumber!!,
             ).observe(this@VehicleProfileActivity) {
                 isProgressBarLoading?.value = false
-                if(it.response != null) {
+                if (it.response != null) {
                     Toast.makeText(
                         this@VehicleProfileActivity,
                         "Successfully Removed",
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     ).show()
-                } else{
-                    Toast.makeText(
-                        this@VehicleProfileActivity,
-                        "Error while removing vehicle",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                } else
+                    {
+                        Toast.makeText(
+                            this@VehicleProfileActivity,
+                            "Error while removing vehicle",
+                            Toast.LENGTH_LONG,
+                        ).show()
+                    }
             }
         } else {
             Toast.makeText(
                 this@VehicleProfileActivity,
                 "Vehicle data is not available",
-                Toast.LENGTH_LONG
+                Toast.LENGTH_LONG,
             ).show()
         }
     }

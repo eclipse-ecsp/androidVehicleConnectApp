@@ -19,41 +19,83 @@ package com.harman.vehicleconnects.models.dataclass
 sealed class RemoteOperationItem(
     var statusText: String,
     var itemName: String,
-    var imageId: Int
+    var imageId: Int,
 ) {
+    /**
+     * Data class holds the Window items information
+     *
+     * @property itemStatusText
+     * @property itemTitleName
+     * @property itemImageId
+     */
     data class Window(
         var itemStatusText: String,
         var itemTitleName: String,
-        var itemImageId: Int
-    ) : RemoteOperationItem( itemStatusText, itemTitleName, itemImageId)
+        var itemImageId: Int,
+    ) : RemoteOperationItem(itemStatusText, itemTitleName, itemImageId)
 
+    /**
+     * Data class holds the Light items information
+     *
+     * @property itemStatusText
+     * @property itemTitleName
+     * @property itemImageId
+     */
     data class Light(
         var itemStatusText: String,
         var itemTitleName: String,
-        var itemImageId: Int
-    ) : RemoteOperationItem( itemStatusText, itemTitleName, itemImageId)
+        var itemImageId: Int,
+    ) : RemoteOperationItem(itemStatusText, itemTitleName, itemImageId)
 
+    /**
+     * Data class holds the Alarm items information
+     *
+     * @property itemStatusText
+     * @property itemTitleName
+     * @property itemImageId
+     */
     data class Alarm(
         var itemStatusText: String,
         var itemTitleName: String,
-        var itemImageId: Int
+        var itemImageId: Int,
     ) : RemoteOperationItem(itemStatusText, itemTitleName, itemImageId)
 
+    /**
+     * Data class holds the Door items information
+     *
+     * @property itemStatusText
+     * @property itemTitleName
+     * @property itemImageId
+     */
     data class Door(
         var itemStatusText: String,
         var itemTitleName: String,
-        var itemImageId: Int
+        var itemImageId: Int,
     ) : RemoteOperationItem(itemStatusText, itemTitleName, itemImageId)
 
+    /**
+     * Data class holds the Engine items information
+     *
+     * @property itemStatusText
+     * @property itemTitleName
+     * @property itemImageId
+     */
     data class Engine(
         var itemStatusText: String,
         var itemTitleName: String,
-        var itemImageId: Int
+        var itemImageId: Int,
     ) : RemoteOperationItem(itemStatusText, itemTitleName, itemImageId)
 
+    /**
+     * Data class holds the Trunk items information
+     *
+     * @property itemStatusText
+     * @property itemTitleName
+     * @property itemImageId
+     */
     data class Trunk(
         var itemStatusText: String,
         var itemTitleName: String,
-        var itemImageId: Int
+        var itemImageId: Int,
     ) : RemoteOperationItem(itemStatusText, itemTitleName, itemImageId)
 }

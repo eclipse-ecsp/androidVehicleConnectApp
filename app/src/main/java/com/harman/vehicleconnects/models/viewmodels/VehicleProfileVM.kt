@@ -1,17 +1,4 @@
 package com.harman.vehicleconnects.models.viewmodels
-
-import android.app.Activity
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.harman.vehicleconnects.repository.VehicleProfileRepository
-import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.AssociatedDevice
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.TerminateDeviceData
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.PostVehicleAttributeData
-import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.VehicleAttributeDetail
-import com.harman.vehicleconnects.models.dataclass.VehicleProfileModel
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -28,6 +15,24 @@ import com.harman.vehicleconnects.models.dataclass.VehicleProfileModel
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.app.Activity
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.harman.androidvehicleconnectsdk.helper.response.CustomMessage
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.TerminateDeviceData
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.PostVehicleAttributeData
+import com.harman.androidvehicleconnectsdk.vehicleservice.model.vehicleprofile.VehicleAttributeDetail
+import com.harman.vehicleconnects.models.dataclass.VehicleProfileModel
+import com.harman.vehicleconnects.repository.VehicleProfileRepository
+
+/**
+ * ViewModel class for Vehicle profile screen
+ *
+ * @constructor
+ *
+ * @param activity of Application lifecycle
+ */
 class VehicleProfileVM(activity: Activity) : AndroidViewModel(activity.application) {
     private var topBarTitle = MutableLiveData("")
     private var _onSaveBtnClick = MutableLiveData<PostVehicleAttributeData>()
@@ -36,51 +41,104 @@ class VehicleProfileVM(activity: Activity) : AndroidViewModel(activity.applicati
         VehicleProfileRepository()
     }
 
+    /**
+     * Represents to get the title value of the screens
+     *
+     * @return [MutableLiveData] of title value
+     */
     fun getTopBarTitle(): MutableLiveData<String> {
         return topBarTitle
     }
 
+    /**
+     * Represents to set the title value of the screens
+     *
+     * @param title value as string
+     */
     fun setTopBarTitle(title: String) {
         topBarTitle.value = title
     }
 
-    fun onSaveBtnClick(name: String, vehicleProfileModel: VehicleProfileModel) {
-        val postVehicleAttributeData = PostVehicleAttributeData(
-            VehicleAttributeDetail(
-                vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.baseColor,
-                vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.make,
-                vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.model,
-                vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.modelYear,
-                vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.bodyType,
-                name
+    /**
+     * Function is to trigger on click of SAVE button
+     *
+     * @param name vehicle name
+     * @param vehicleProfileModel vehicle profile model data
+     */
+    fun onSaveBtnClick(
+        name: String,
+        vehicleProfileModel: VehicleProfileModel,
+    ) {
+        val postVehicleAttributeData =
+            PostVehicleAttributeData(
+                VehicleAttributeDetail(
+                    vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.baseColor,
+                    vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.make,
+                    vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.model,
+                    vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.modelYear,
+                    vehicleProfileModel.vehicleDetailData?.vehicleAttributes?.bodyType,
+                    name,
+                ),
             )
-        )
         _onSaveBtnClick.postValue(
-            postVehicleAttributeData
+            postVehicleAttributeData,
         )
     }
 
+    /**
+     * Function is to invoke on click of Save button
+     *
+     * @return [LiveData] of [PostVehicleAttributeData]
+     */
     fun isSaveBtnClicked(): LiveData<PostVehicleAttributeData> {
         return _onSaveBtnClick
     }
 
+    /**
+     * Function is to update the vehicle profile data
+     *
+     * @param deviceId device id as [String]
+     * @param postVehicleAttributeData [PostVehicleAttributeData]
+     * @return [MutableLiveData] of [CustomMessage]
+     */
     fun updateVehicleProfileData(
         deviceId: String,
-        postVehicleAttributeData: PostVehicleAttributeData
+        postVehicleAttributeData: PostVehicleAttributeData,
     ): MutableLiveData<CustomMessage<String>> {
         return vehicleProfileRepository.updateVehicleProfileData(deviceId, postVehicleAttributeData)
     }
 
-    fun terminateVehicle(serialNumber: String, deviceId: String, imeiNumber: String): MutableLiveData<CustomMessage<String>>{
+    /**
+     * Function is to terminate vehicle using vehicle details
+     *
+     * @param serialNumber vehicle [serialNumber]
+     * @param deviceId device id as [String]
+     * @param imeiNumber IMEI number of vehicle
+     * @return [MutableLiveData] of [CustomMessage]
+     */
+    fun terminateVehicle(
+        serialNumber: String,
+        deviceId: String,
+        imeiNumber: String,
+    ): MutableLiveData<CustomMessage<String>>  {
         return vehicleProfileRepository.terminateVehicle(TerminateDeviceData(serialNumber, deviceId, imeiNumber))
     }
 
-
-    fun clickedOnRemoveVehicle(value: Boolean){
+    /**
+     * Function is to set the [Boolean] value if remove vehicle is clicked
+     *
+     * @param value [Boolean]
+     */
+    fun clickedOnRemoveVehicle(value: Boolean)  {
         _isRemoveVehicleClicked.postValue(value)
     }
 
-    fun isRemoveVehicleClicked(): LiveData<Boolean>{
+    /**
+     * Function is to notify UI regarding the remove vehicle button click
+     *
+     * @return [LiveData] of [Boolean]
+     */
+    fun isRemoveVehicleClicked(): LiveData<Boolean>  {
         return _isRemoveVehicleClicked
     }
 }

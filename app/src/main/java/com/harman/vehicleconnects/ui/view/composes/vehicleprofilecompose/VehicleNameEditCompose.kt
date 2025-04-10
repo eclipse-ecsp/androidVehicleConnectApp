@@ -1,5 +1,20 @@
 package com.harman.vehicleconnects.ui.view.composes.vehicleprofilecompose
-
+/********************************************************************************
+ * Copyright (c) 2023-24 Harman International
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -35,36 +50,22 @@ import androidx.compose.ui.unit.sp
 import com.harman.vehicleconnects.R
 import com.harman.vehicleconnects.models.dataclass.VehicleProfileModel
 import com.harman.vehicleconnects.models.viewmodels.VehicleProfileVM
-import com.harman.vehicleconnects.ui.view.composes.TextFieldState
 import com.harman.vehicleconnects.ui.theme.Black
 import com.harman.vehicleconnects.ui.theme.LightBlue
 import com.harman.vehicleconnects.ui.theme.LightGray
 import com.harman.vehicleconnects.ui.theme.MildGray
 import com.harman.vehicleconnects.ui.theme.White
+import com.harman.vehicleconnects.ui.view.composes.TextFieldState
 
-/********************************************************************************
- * Copyright (c) 2023-24 Harman International
+/**
+ * VehicleNameEditCompose contains Vehicle profile editing screen related compose functions
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- ********************************************************************************/
-
-@OptIn(ExperimentalMaterial3Api::class)
+ */
 @Composable
 fun Activity.VehicleNameEditMainCompose(
     inputValue: TextFieldState? = remember { TextFieldState() },
     vehicleProfileVM: VehicleProfileVM?,
-    vehicleProfileModel: VehicleProfileModel?
+    vehicleProfileModel: VehicleProfileModel?,
 ) {
     LaunchedEffect(Unit) {
         vehicleProfileVM?.setTopBarTitle(getString(R.string.edit_nickname_text))
@@ -72,24 +73,27 @@ fun Activity.VehicleNameEditMainCompose(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .verticalScroll(rememberScrollState()),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(White)
+                .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         Text(
-            modifier = Modifier
-                .background(LightGray)
-                .fillMaxWidth()
-                .padding(top = 15.dp, start = 20.dp, end = 20.dp)
-                .height(30.dp).testTag("vehicle_name_tag"),
-            text = vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
-                ?: "",
+            modifier =
+                Modifier
+                    .background(LightGray)
+                    .fillMaxWidth()
+                    .padding(top = 15.dp, start = 20.dp, end = 20.dp)
+                    .height(30.dp).testTag("vehicle_name_tag"),
+            text =
+                vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
+                    ?: "",
             color = Black,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         val textFieldPadding = 6.dp
@@ -97,38 +101,40 @@ fun Activity.VehicleNameEditMainCompose(
             value = inputValue?.textInput ?: "",
             onValueChange = { inputValue?.textInput = it },
             placeholder = { Text("Nick Name", color = MildGray) },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedTextColor = Black,
-                unfocusedTextColor = Black,
-                containerColor = White
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp).testTag("nick_name_text_field_tag")
-                .drawWithContent {
-                    drawContent()
-                    val strokeWidth = 1.dp.value * density
-                    val y = size.height - strokeWidth / 2
-                    drawLine(
-                        LightBlue,
-                        Offset((textFieldPadding).toPx(), y),
-                        Offset(size.width - textFieldPadding.toPx(), y)
-                    )
-                },
+            colors =
+                TextFieldDefaults.colors(
+                    focusedTextColor = Black,
+                    unfocusedTextColor = Black,
+                    focusedContainerColor = White,
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp).testTag("nick_name_text_field_tag")
+                    .drawWithContent {
+                        drawContent()
+                        val strokeWidth = 1.dp.value * density
+                        val y = size.height - strokeWidth / 2
+                        drawLine(
+                            LightBlue,
+                            Offset((textFieldPadding).toPx(), y),
+                            Offset(size.width - textFieldPadding.toPx(), y),
+                        )
+                    },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-
         )
 
         SubmitButtonCompose {
             keyboardController?.hide()
-            if (inputValue?.textInput != null && vehicleProfileModel != null)
+            if (inputValue?.textInput != null && vehicleProfileModel != null) {
                 vehicleProfileVM?.onSaveBtnClick(inputValue.textInput, vehicleProfileModel)
-            else
+            } else {
                 Toast.makeText(
                     this@VehicleNameEditMainCompose,
                     "Entered name is invalid",
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_LONG,
                 ).show()
+            }
         }
     }
 }
@@ -137,13 +143,15 @@ fun Activity.VehicleNameEditMainCompose(
 fun Activity.SubmitButtonCompose(onClick: () -> Unit) {
     TextButton(
         onClick = { onClick() },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = LightBlue
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
-            .height(50.dp).testTag("save_btn_tag"),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = LightBlue,
+            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+                .height(50.dp).testTag("save_btn_tag"),
         shape = RectangleShape,
     ) {
         Text(getString(R.string.save_text), color = White)

@@ -1,23 +1,4 @@
 package com.harman.vehicleconnects.helper
-
-import android.content.Context
-import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build.VERSION.SDK_INT
-import android.os.Parcelable
-import android.widget.Toast
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
-
-
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -34,6 +15,20 @@ import java.util.concurrent.TimeUnit
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.content.Context
+import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build.VERSION.SDK_INT
+import android.os.Parcelable
+import android.widget.Toast
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 /**
  * This function is used to convert the generic data class object to json string
@@ -51,18 +46,26 @@ internal inline fun <reified T> Gson.dataToJson(data: T): String = toJson(data)
  * @param json json String as input
  * @return Respective data class object
  */
-internal inline fun <reified T> Gson.fromJson(json: String): T =
-    fromJson<T>(json, object : TypeToken<T>() {}.type)
+internal inline fun <reified T> Gson.fromJson(json: String): T = fromJson<T>(json, object : TypeToken<T>() {}.type)
 
 /**
  * This function is to toast the message
  *
  * @param message error information to toast
  */
-fun toastError(context: Context, message: String) {
+fun toastError(
+    context: Context,
+    message: String,
+) {
     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 }
 
+/**
+ * Function represents to convert the ISO time to milliseconds
+ *
+ * @param isoTime string value comes in ISO format
+ * @return [Long] time in milli seconds
+ */
 fun convertISO8601TimeToMillis(isoTime: String?): Long {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ", Locale.getDefault())
     val tempConversion = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -78,22 +81,48 @@ fun convertISO8601TimeToMillis(isoTime: String?): Long {
     return -1
 }
 
-fun launchActivity(context: Context, classes : Class<*>){
+/**
+ * Generic function which is used to start an activity
+ *
+ * @param context application context
+ * @param classes Activity which we need to invoke
+ */
+fun launchActivity(
+    context: Context,
+    classes: Class<*>,
+)  {
     val intent = Intent(context, classes)
     context.startActivity(intent)
 }
 
-inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
-    SDK_INT >= 33 -> {
-        if (hasExtra(key)) {
-            getParcelableExtra(key, T::class.java)
-        } else {
-            null
+/**
+ * Function is to parse the value which is bundled with Intent
+ *
+ * @param T Generic class type
+ * @param key key value used in Intent KEY-VALUE pair
+ * @return [T] generic class type
+ * */
+inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? =
+    when {
+        SDK_INT >= 33 -> {
+            if (hasExtra(key)) {
+                getParcelableExtra(key, T::class.java)
+            } else {
+                null
+            }
         }
+        else ->
+            @Suppress("DEPRECATION")
+            getParcelableExtra(key)
+                as? T
     }
-    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
-}
 
+/**
+ * Function used to check if the RO request is pending or not
+ *
+ * @param timeStamp timestamp value in [Long]
+ * @return Compared value in [Boolean]
+ */
 fun isRequestPendingLong(timeStamp: Long): Boolean {
     val startDate = Date(timeStamp)
     val endDate = Date()
@@ -102,6 +131,12 @@ fun isRequestPendingLong(timeStamp: Long): Boolean {
     return sec > 180
 }
 
+/**
+ * Function is to check the internet connectivity
+ *
+ * @param context application context
+ * @return result in [Boolean] value
+ */
 fun isInternetAvailable(context: Context): Boolean {
     val result: Boolean
     val connectivityManager =
@@ -109,12 +144,13 @@ fun isInternetAvailable(context: Context): Boolean {
     val networkCapabilities = connectivityManager.activeNetwork ?: return false
     val actNw =
         connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-    result = when {
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-        actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-        else -> false
-    }
+    result =
+        when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
 
     return result
 }
