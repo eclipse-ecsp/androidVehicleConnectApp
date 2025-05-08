@@ -17,7 +17,7 @@
         android:theme="@style/Theme.AppCompat"
         tools:targetApi="31">
         <activity
-            android:name="com.harman.vehicleconnects.ui.view.activities.LoginActivity"
+            android:name="org.eclipse.ecsp.ui.view.activities.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -26,11 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.harman.vehicleconnects.ui.view.activities.DeviceAssociationActivity"
+
+        <activity android:name="org.eclipse.ecsp.ui.view.activities.DeviceAssociationActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.harman.vehicleconnects.ui.view.activities.DashboardActivity"
+        <activity android:name="org.eclipse.ecsp.ui.view.activities.DashboardActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.harman.vehicleconnects.ui.view.activities.VehicleProfileActivity"
+        <activity android:name="org.eclipse.ecsp.ui.view.activities.VehicleProfileActivity"
             android:screenOrientation="portrait"/>
 
         <service
