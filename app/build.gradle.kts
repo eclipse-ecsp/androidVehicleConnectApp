@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "org.eclipse.ecsp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "org.eclipse.ecsp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 16
         versionName = "3.3"
         multiDexEnabled = true
@@ -69,7 +69,7 @@ android {
 dependencies {
 
     implementation("org.eclipse.ecsp:vehicleconnectsdk:1.1.5")
-    implementation("androidx.core:core-ktx:1.13.0")
+    implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation("androidx.compose.ui:ui:1.5.0")
     implementation("androidx.compose.ui:ui-graphics:1.5.0")
