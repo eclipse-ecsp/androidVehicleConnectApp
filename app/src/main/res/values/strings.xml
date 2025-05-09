@@ -6,8 +6,8 @@
     <string name="find_obdii_port_text">HELP ME FIND OBDII PORT IN MY VEHICLE</string>
     <string name="next_btn_text">Next</string>
     <string name="add_device_btn_text">Add Device</string>
-    <string name="enter_imei_text">Enter IMEI</string>
-    <string name="enter_imei_sub_text">The IMEI number can be found on the back side of your device, or on the card included inside the packaging box.</string>
+    <string name="enter_serial_text">Enter Serial Number</string>
+    <string name="enter_serial_sub_text">The Serial number can be found on the back side of your device, or on the card included inside the packaging box.</string>
     <string name="sign_in_text">SIGN IN</string>
     <string name="sign_up_text">SIGN UP</string>
     <string name="remote_control_text">Remote Control</string>
@@ -28,4 +28,8 @@
     <string name="save_text">Save</string>
     <string name="remove_vehicle_text">Remove Vehicle</string>
     <string name="remove_vehicle_sub_text">Remove all data received from the vehicle</string>
+    <string name="password_change_title_text">Change Password</string>
+    <string name="password_change_sub_text">Confirm to trigger change password request</string>
+    <string name="password_change_success_status_text">Successfully triggered password change request, you will get link on your email to change the password</string>
+    <string name="password_change_failure_status_text">Failed to trigger password change request</string>
 </resources>

@@ -20,7 +20,7 @@ buildscript {
     }
 }
 
-group = "com.harman.androidvehicleconnectsdk"
+group = "org.eclipse.ecsp"
 version = 1.0
 project.allprojects {
     tasks.cyclonedxBom {
