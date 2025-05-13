@@ -2,22 +2,21 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
-    id("kotlin-kapt")
     id("com.google.gms.google-services")
     id("kotlin-parcelize")
     id("org.cyclonedx.bom")
 }
 
 android {
-    namespace = "com.harman.vehicleconnects"
+    namespace = "org.eclipse.ecsp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.harman.vehicleconnects"
+        applicationId = "org.eclipse.ecsp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 13
-        versionName = "2.5"
+        versionCode = 16
+        versionName = "3.3"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -28,14 +27,14 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
         }
         debug {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -45,7 +44,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-        group = "com.harman.vehicleconnects"
+        group = "org.eclipse.ecsp"
         version = 1.0
     }
     kotlinOptions {
@@ -69,8 +68,7 @@ android {
 
 dependencies {
 
-    implementation(files("libs/androidVehicleConnectSDK.aar"))
-
+    implementation("org.eclipse.ecsp:vehicleconnectsdk:1.1.5")
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation("androidx.compose.ui:ui:1.5.0")
@@ -99,29 +97,12 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
 
     implementation("com.google.dagger:dagger:2.55")
-    implementation("com.google.dagger:dagger-android:2.55")
-    implementation("com.google.dagger:dagger-android-support:2.55")
-    kapt("com.google.dagger:dagger-android-processor:2.55")
-    kapt("com.google.dagger:dagger-compiler:2.55")
+    annotationProcessor("com.google.dagger:dagger-compiler:2.55")
 
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation(kotlin("reflect"))
 
-    implementation("com.google.firebase:firebase-messaging:24.0.0"){
-        exclude(group ="com.google.firebase", module="firebase-iid-interop")
-        exclude(group ="com.google.firebase", module="firebase-measurement-connector")
-        exclude(group ="com.google.firebase", module="firebase-core")
-        exclude(group ="com.google.firebase", module="firebase-annotations")
-        exclude(group ="com.google.firebase", module="firebase-installations-interop")
-        exclude(group ="com.google.firebase", module="firebase-installations")
-//        exclude(group ="com.google.android.gms", module="play-services-tasks")
-        exclude(group ="com.google.android.gms", module="play-services-stats")
-        exclude(group ="com.google.android.gms", module="play-services-cloud-messaging")
-//        exclude(group ="com.google.android.gms", module="play-services-basement")
-        exclude(group ="com.google.android.gms", module="play-services-base")
-        exclude(group ="com.google.android.datatransport", module="transport-api")
-
-    }
+    implementation("com.google.firebase:firebase-messaging:24.0.0")
 }

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:104347266266:android:a6d5289e3",
         "android_client_info": {
-          "package_name": "com.harman.vehicleconnects"
+          "package_name": "org.eclipse.ecsp"
         }
       },
       "oauth_client": [],
