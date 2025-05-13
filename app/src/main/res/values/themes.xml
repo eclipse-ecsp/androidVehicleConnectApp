@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.HarmanOEM" parent="Theme.AppCompat" />
+    <style name="Theme.OEM" parent="Theme.AppCompat" />
 </resources>
