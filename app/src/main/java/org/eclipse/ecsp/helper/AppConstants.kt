@@ -102,60 +102,60 @@ object AppConstants {
     val defaultRoValuesList =
         listOf(
             RemoteOperationItem.Window(
-                org.eclipse.ecsp.helper.AppConstants.CLOSED,
-                org.eclipse.ecsp.helper.AppConstants.WINDOWS, setStateIcon(
-                    org.eclipse.ecsp.helper.AppConstants.CLOSED,
-                    org.eclipse.ecsp.helper.AppConstants.WINDOWS
+                CLOSED,
+                WINDOWS, setStateIcon(
+                    CLOSED,
+                    WINDOWS
                 )),
             RemoteOperationItem.Light(
-                org.eclipse.ecsp.helper.AppConstants.OFF,
-                org.eclipse.ecsp.helper.AppConstants.LIGHT, setStateIcon(
-                    org.eclipse.ecsp.helper.AppConstants.OFF,
-                    org.eclipse.ecsp.helper.AppConstants.LIGHT
+                OFF,
+                LIGHT, setStateIcon(
+                    OFF,
+                    LIGHT
                 )),
             RemoteOperationItem.Alarm(
-                org.eclipse.ecsp.helper.AppConstants.OFF,
-                org.eclipse.ecsp.helper.AppConstants.ALARM, setStateIcon(
-                    org.eclipse.ecsp.helper.AppConstants.OFF,
-                    org.eclipse.ecsp.helper.AppConstants.ALARM
+                OFF,
+                ALARM, setStateIcon(
+                    OFF,
+                    ALARM
                 )),
             RemoteOperationItem.Door(
-                org.eclipse.ecsp.helper.AppConstants.LOCKED,
-                org.eclipse.ecsp.helper.AppConstants.DOOR, setStateIcon(
-                    org.eclipse.ecsp.helper.AppConstants.LOCKED,
-                    org.eclipse.ecsp.helper.AppConstants.DOOR
+                LOCKED,
+                DOOR, setStateIcon(
+                    LOCKED,
+                    DOOR
                 )),
             RemoteOperationItem.Engine(
-                org.eclipse.ecsp.helper.AppConstants.STOPPED,
-                org.eclipse.ecsp.helper.AppConstants.ENGINE, setStateIcon(
-                    org.eclipse.ecsp.helper.AppConstants.STOPPED,
-                    org.eclipse.ecsp.helper.AppConstants.ENGINE
+                STOPPED,
+                ENGINE, setStateIcon(
+                    STOPPED,
+                    ENGINE
                 )),
             RemoteOperationItem.Trunk(
-                org.eclipse.ecsp.helper.AppConstants.LOCKED,
-                org.eclipse.ecsp.helper.AppConstants.TRUNK, setStateIcon(
-                    org.eclipse.ecsp.helper.AppConstants.LOCKED,
-                    org.eclipse.ecsp.helper.AppConstants.TRUNK
+                LOCKED,
+                TRUNK, setStateIcon(
+                    LOCKED,
+                    TRUNK
                 )),
         )
 
     val ALERT_TYPES =
         listOf(
-            org.eclipse.ecsp.helper.AppConstants.ALERT_CURFEW,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_BOUNDARY,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_SPEED,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_DONGLE_STATUS,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_TOW,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_LOW_FUEL,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_IDLE,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_DISTURBANCE,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_FIRMWARE_UPGRADE,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_FIRMWARE_DOWNLOADED,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_BREAK_IN_WARNING,
-            org.eclipse.ecsp.helper.AppConstants.GLOBAL_DOOR_LOCK,
-            org.eclipse.ecsp.helper.AppConstants.SEATBELT_ALERT,
-            org.eclipse.ecsp.helper.AppConstants.EPID_TPMS_ALERT,
-            org.eclipse.ecsp.helper.AppConstants.ALERT_GENERIC_NOTIFICATION,
+            ALERT_CURFEW,
+            ALERT_BOUNDARY,
+            ALERT_SPEED,
+            ALERT_DONGLE_STATUS,
+            ALERT_TOW,
+            ALERT_LOW_FUEL,
+            ALERT_IDLE,
+            ALERT_DISTURBANCE,
+            ALERT_FIRMWARE_UPGRADE,
+            ALERT_FIRMWARE_DOWNLOADED,
+            ALERT_BREAK_IN_WARNING,
+            GLOBAL_DOOR_LOCK,
+            SEATBELT_ALERT,
+            EPID_TPMS_ALERT,
+            ALERT_GENERIC_NOTIFICATION,
         )
 
     private const val SHARED_PREF = "shared_pref"
@@ -163,54 +163,54 @@ object AppConstants {
     private const val VEHICLE_LIST = "vehicle_list"
 
     fun getUserProfile(activity: Activity?): String {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE)
-        return sharedPref?.getString(org.eclipse.ecsp.helper.AppConstants.USER_PROFILE, "").toString()
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        return sharedPref?.getString(USER_PROFILE, "").toString()
     }
 
     fun setUserProfile(
         activity: Activity?,
         value: String?,
     ) {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE) ?: return
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
-            putString(org.eclipse.ecsp.helper.AppConstants.USER_PROFILE, value)
+            putString(USER_PROFILE, value)
             apply()
         }
     }
 
     fun removeAll(activity: Activity?)  {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE) ?: return
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         sharedPref.edit().clear().apply()
     }
 
     fun getVehicleList(activity: Activity?): String  {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE)
-        return sharedPref?.getString(org.eclipse.ecsp.helper.AppConstants.VEHICLE_LIST, "{}").toString()
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        return sharedPref?.getString(VEHICLE_LIST, "{}").toString()
     }
 
     fun setVehicleList(
         activity: Activity?,
         value: String?,
     ) {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE) ?: return
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
-            putString(org.eclipse.ecsp.helper.AppConstants.VEHICLE_LIST, value)
+            putString(VEHICLE_LIST, value)
             apply()
         }
     }
 
     fun getWindowCurrentState(activity: Activity?): String  {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE)
-        return sharedPref?.getString(org.eclipse.ecsp.helper.AppConstants.WINDOW_CURRENT_STATE, "Closed").toString()
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        return sharedPref?.getString(WINDOW_CURRENT_STATE, "Closed").toString()
     }
 
     fun setWindowCurrentState(
         activity: Activity?,
         value: String?,
     ) {
-        val sharedPref = activity?.getSharedPreferences(org.eclipse.ecsp.helper.AppConstants.SHARED_PREF, Context.MODE_PRIVATE) ?: return
+        val sharedPref = activity?.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
-            putString(org.eclipse.ecsp.helper.AppConstants.WINDOW_CURRENT_STATE, value)
+            putString(WINDOW_CURRENT_STATE, value)
             apply()
         }
     }

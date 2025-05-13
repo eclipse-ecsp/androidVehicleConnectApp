@@ -83,7 +83,7 @@ fun SettingsMainCompose(
         dashboardVM.setTopBarTitle(activity.getString(R.string.settings_text))
     }
     val userProfile =
-        Gson().fromJson<UserProfile?>(org.eclipse.ecsp.helper.AppConstants.getUserProfile(activity))
+        Gson().fromJson<UserProfile?>(AppConstants.getUserProfile(activity))
     val version =
         activity.packageManager.getPackageInfo(
             activity.packageName,

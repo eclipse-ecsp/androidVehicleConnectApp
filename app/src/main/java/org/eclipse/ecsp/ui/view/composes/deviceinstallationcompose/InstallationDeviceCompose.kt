@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.eclipse.ecsp.R
+import org.eclipse.ecsp.helper.AppConstants
 import org.eclipse.ecsp.models.viewmodels.DeviceAssociationVM
 import org.eclipse.ecsp.ui.theme.Black
 import org.eclipse.ecsp.ui.theme.DarkGray
@@ -95,7 +96,7 @@ fun Activity.InstallDeviceMainScreenCompose(
                 FindObdPortCompose()
                 NextButtonCompose {
                     // do click action
-                    navController.navigate(org.eclipse.ecsp.helper.AppConstants.ENTER_SERIAL_NUM) {
+                    navController.navigate(AppConstants.ENTER_SERIAL_NUM) {
                         popUpTo(navController.graph.startDestinationId)
                         launchSingleTop = true
                     }

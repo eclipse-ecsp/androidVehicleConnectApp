@@ -34,77 +34,77 @@ class RemoteOperationService {
         val eventId = events?.roEvents?.eventID
         val state =
             when (events?.roStatus) {
-                org.eclipse.ecsp.helper.AppConstants.PROCESSED_SUCCESS -> events.roEvents.data?.mState ?: ""
-                org.eclipse.ecsp.helper.AppConstants.PENDING -> org.eclipse.ecsp.helper.AppConstants.PLEASE_WAIT
+                AppConstants.PROCESSED_SUCCESS -> events.roEvents.data?.mState ?: ""
+                AppConstants.PENDING -> AppConstants.PLEASE_WAIT
                 else ->
                     when ((events?.roEvents?.data?.mState)?.lowercase()) {
-                        org.eclipse.ecsp.helper.AppConstants.ON.lowercase() -> org.eclipse.ecsp.helper.AppConstants.OFF
-                        org.eclipse.ecsp.helper.AppConstants.OFF.lowercase() -> org.eclipse.ecsp.helper.AppConstants.ON
-                        org.eclipse.ecsp.helper.AppConstants.LOCKED.lowercase() -> org.eclipse.ecsp.helper.AppConstants.UNLOCKED
-                        org.eclipse.ecsp.helper.AppConstants.UNLOCKED.lowercase() -> org.eclipse.ecsp.helper.AppConstants.LOCKED
-                        org.eclipse.ecsp.helper.AppConstants.CLOSED.lowercase() -> {
-                            if (events.roEvents.eventID == org.eclipse.ecsp.helper.AppConstants.WINDOW_EVENT_ID)
+                        AppConstants.ON.lowercase() -> AppConstants.OFF
+                        AppConstants.OFF.lowercase() -> AppConstants.ON
+                        AppConstants.LOCKED.lowercase() -> AppConstants.UNLOCKED
+                        AppConstants.UNLOCKED.lowercase() -> AppConstants.LOCKED
+                        AppConstants.CLOSED.lowercase() -> {
+                            if (events.roEvents.eventID == AppConstants.WINDOW_EVENT_ID)
                                 {
-                                    org.eclipse.ecsp.helper.AppConstants.getWindowCurrentState(activity)
+                                    AppConstants.getWindowCurrentState(activity)
                                 } else {
-                                org.eclipse.ecsp.helper.AppConstants.OPENED
+                                AppConstants.OPENED
                             }
                         }
-                        org.eclipse.ecsp.helper.AppConstants.OPENED.lowercase() -> {
-                            if (events.roEvents.eventID == org.eclipse.ecsp.helper.AppConstants.WINDOW_EVENT_ID)
+                        AppConstants.OPENED.lowercase() -> {
+                            if (events.roEvents.eventID == AppConstants.WINDOW_EVENT_ID)
                                 {
-                                    org.eclipse.ecsp.helper.AppConstants.getWindowCurrentState(activity)
+                                    AppConstants.getWindowCurrentState(activity)
                                 } else {
-                                org.eclipse.ecsp.helper.AppConstants.CLOSED
+                                AppConstants.CLOSED
                             }
                         }
-                        org.eclipse.ecsp.helper.AppConstants.STARTED.lowercase() -> org.eclipse.ecsp.helper.AppConstants.STOPPED
-                        org.eclipse.ecsp.helper.AppConstants.STOPPED.lowercase() -> org.eclipse.ecsp.helper.AppConstants.STARTED
-                        org.eclipse.ecsp.helper.AppConstants.PARTIAL_OPENED.lowercase() -> org.eclipse.ecsp.helper.AppConstants.getWindowCurrentState(activity)
+                        AppConstants.STARTED.lowercase() -> AppConstants.STOPPED
+                        AppConstants.STOPPED.lowercase() -> AppConstants.STARTED
+                        AppConstants.PARTIAL_OPENED.lowercase() -> AppConstants.getWindowCurrentState(activity)
                         else -> ""
                     }
             }
         when (eventId) {
-            org.eclipse.ecsp.helper.AppConstants.WINDOW_EVENT_ID ->
+            AppConstants.WINDOW_EVENT_ID ->
                 tempList!![0] =
                     RemoteOperationItem.Window(
                         state,
-                        org.eclipse.ecsp.helper.AppConstants.WINDOWS, setStateIcon(state, org.eclipse.ecsp.helper.AppConstants.WINDOWS),
+                        AppConstants.WINDOWS, setStateIcon(state, AppConstants.WINDOWS),
                     )
 
-            org.eclipse.ecsp.helper.AppConstants.LIGHTS_EVENT_ID ->
+            AppConstants.LIGHTS_EVENT_ID ->
                 tempList!![1] =
                     RemoteOperationItem.Light(
                         state,
-                        org.eclipse.ecsp.helper.AppConstants.LIGHT, setStateIcon(state, org.eclipse.ecsp.helper.AppConstants.LIGHT),
+                        AppConstants.LIGHT, setStateIcon(state, AppConstants.LIGHT),
                     )
 
-            org.eclipse.ecsp.helper.AppConstants.ALARM_EVENT_ID ->
+            AppConstants.ALARM_EVENT_ID ->
                 tempList!![2] =
                     RemoteOperationItem.Alarm(
                         state,
-                        org.eclipse.ecsp.helper.AppConstants.ALARM, setStateIcon(state, org.eclipse.ecsp.helper.AppConstants.ALARM),
+                        AppConstants.ALARM, setStateIcon(state, AppConstants.ALARM),
                     )
 
-            org.eclipse.ecsp.helper.AppConstants.DOOR_EVENT_ID ->
+            AppConstants.DOOR_EVENT_ID ->
                 tempList!![3] =
                     RemoteOperationItem.Door(
                         state,
-                        org.eclipse.ecsp.helper.AppConstants.DOOR, setStateIcon(state, org.eclipse.ecsp.helper.AppConstants.DOOR),
+                        AppConstants.DOOR, setStateIcon(state, AppConstants.DOOR),
                     )
 
-            org.eclipse.ecsp.helper.AppConstants.ENGINE_EVENT_ID ->
+            AppConstants.ENGINE_EVENT_ID ->
                 tempList!![4] =
                     RemoteOperationItem.Engine(
                         state,
-                        org.eclipse.ecsp.helper.AppConstants.ENGINE, setStateIcon(state, org.eclipse.ecsp.helper.AppConstants.ENGINE),
+                        AppConstants.ENGINE, setStateIcon(state, AppConstants.ENGINE),
                     )
 
-            org.eclipse.ecsp.helper.AppConstants.TRUNK_EVENT_ID ->
+            AppConstants.TRUNK_EVENT_ID ->
                 tempList!![5] =
                     RemoteOperationItem.Trunk(
                         state,
-                        org.eclipse.ecsp.helper.AppConstants.TRUNK, setStateIcon(state, org.eclipse.ecsp.helper.AppConstants.TRUNK),
+                        AppConstants.TRUNK, setStateIcon(state, AppConstants.TRUNK),
                     )
         }
         return tempList

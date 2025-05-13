@@ -67,7 +67,7 @@ class VehicleProfileActivity : BaseAppActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vehicleProfileModel = intent.parcelable(org.eclipse.ecsp.helper.AppConstants.SELECTED_DEVICE)
+        vehicleProfileModel = intent.parcelable(AppConstants.SELECTED_DEVICE)
     }
 
     override fun onResume() {

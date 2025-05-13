@@ -39,7 +39,7 @@ open class BaseAppActivity : ComponentActivity(), ConnectionManager.ConnectionLi
         AppManager.isRefreshTokenFailed().observe(this) { isRefreshTokenFailed ->
             if (isRefreshTokenFailed) {
                 toastError(this@BaseAppActivity, "Your session expired, please login again.")
-                org.eclipse.ecsp.helper.AppConstants.removeAll(this@BaseAppActivity)
+                AppConstants.removeAll(this@BaseAppActivity)
                 val intent = Intent(this@BaseAppActivity, LoginActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -82,10 +82,10 @@ fun Activity.RemoteOperationScreen(
 
     if (openDialog!!.value.first) {
         when (openDialog.value.third) {
-            org.eclipse.ecsp.helper.AppConstants.ALARM -> {
+            AppConstants.ALARM -> {
                 ShowAlertDialog(
                     title =
-                    if (openDialog.value.second.lowercase() == org.eclipse.ecsp.helper.AppConstants.OFF.lowercase()) {
+                    if (openDialog.value.second.lowercase() == AppConstants.OFF.lowercase()) {
                         getString(R.string.alarm_confirm_activation_text)
                     } else {
                         getString(R.string.alarm_confirm_deactivation_text)
@@ -95,7 +95,7 @@ fun Activity.RemoteOperationScreen(
                     },
                 ) {
                     when (openDialog.value.second.lowercase()) {
-                        org.eclipse.ecsp.helper.AppConstants.ON.lowercase() ->
+                        AppConstants.ON.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -106,7 +106,7 @@ fun Activity.RemoteOperationScreen(
                                 8,
                             )
 
-                        org.eclipse.ecsp.helper.AppConstants.OFF.lowercase() ->
+                        AppConstants.OFF.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -121,10 +121,10 @@ fun Activity.RemoteOperationScreen(
                 }
             }
 
-            org.eclipse.ecsp.helper.AppConstants.DOOR -> {
+            AppConstants.DOOR -> {
                 ShowAlertDialog(
                     title =
-                    if (openDialog.value.second.lowercase() == org.eclipse.ecsp.helper.AppConstants.LOCKED.lowercase()) {
+                    if (openDialog.value.second.lowercase() == AppConstants.LOCKED.lowercase()) {
                         getString(R.string.door_unlock_confirm_text)
                     } else {
                         getString(R.string.door_lock_confirm_text)
@@ -134,7 +134,7 @@ fun Activity.RemoteOperationScreen(
                     },
                 ) {
                     when (openDialog.value.second.lowercase()) {
-                        org.eclipse.ecsp.helper.AppConstants.LOCKED.lowercase() ->
+                        AppConstants.LOCKED.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -145,7 +145,7 @@ fun Activity.RemoteOperationScreen(
                                 null,
                             )
 
-                        org.eclipse.ecsp.helper.AppConstants.UNLOCKED.lowercase() ->
+                        AppConstants.UNLOCKED.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -160,11 +160,11 @@ fun Activity.RemoteOperationScreen(
                 }
             }
 
-            org.eclipse.ecsp.helper.AppConstants.ENGINE -> {
+            AppConstants.ENGINE -> {
                 ShowAlertDialog(
                     title =
                     if (openDialog.value.second.lowercase() ==
-                        org.eclipse.ecsp.helper.AppConstants.STOPPED.lowercase()
+                        AppConstants.STOPPED.lowercase()
                     ) {
                         getString(
                             R.string.engin_start_confirm_text,
@@ -177,7 +177,7 @@ fun Activity.RemoteOperationScreen(
                     },
                 ) {
                     when (openDialog.value.second.lowercase()) {
-                        org.eclipse.ecsp.helper.AppConstants.STARTED.lowercase() ->
+                        AppConstants.STARTED.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -188,7 +188,7 @@ fun Activity.RemoteOperationScreen(
                                 8,
                             )
 
-                        org.eclipse.ecsp.helper.AppConstants.STOPPED.lowercase() ->
+                        AppConstants.STOPPED.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -203,10 +203,10 @@ fun Activity.RemoteOperationScreen(
                 }
             }
 
-            org.eclipse.ecsp.helper.AppConstants.TRUNK -> {
+            AppConstants.TRUNK -> {
                 ShowAlertDialog(
                     title =
-                    if (openDialog.value.second.lowercase() == org.eclipse.ecsp.helper.AppConstants.LOCKED.lowercase()) {
+                    if (openDialog.value.second.lowercase() == AppConstants.LOCKED.lowercase()) {
                         getString(
                             R.string.trunk_opening_text,
                         )
@@ -218,7 +218,7 @@ fun Activity.RemoteOperationScreen(
                     },
                 ) {
                     when (openDialog.value.second.lowercase()) {
-                        org.eclipse.ecsp.helper.AppConstants.UNLOCKED.lowercase() ->
+                        AppConstants.UNLOCKED.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -229,7 +229,7 @@ fun Activity.RemoteOperationScreen(
                                 null,
                             )
 
-                        org.eclipse.ecsp.helper.AppConstants.LOCKED.lowercase() ->
+                        AppConstants.LOCKED.lowercase() ->
                             onClickAction(
                                 remoteOperationVM,
                                 this,
@@ -251,7 +251,7 @@ private fun isAnyOperationRunning(lazyStaggeredGridList: MutableState<ArrayList<
     var isRunning = false
     var eventType = ""
     lazyStaggeredGridList?.value?.forEach {
-        if (it.statusText.lowercase() == org.eclipse.ecsp.helper.AppConstants.PLEASE_WAIT.lowercase()) {
+        if (it.statusText.lowercase() == AppConstants.PLEASE_WAIT.lowercase()) {
             isRunning = true
             eventType = it.itemName
             return@forEach
@@ -270,7 +270,7 @@ private fun onClickAction(
     duration: Int?,
 ) {
     val userProfile =
-        Gson().fromJson<UserProfile?>(org.eclipse.ecsp.helper.AppConstants.getUserProfile(activity))
+        Gson().fromJson<UserProfile?>(AppConstants.getUserProfile(activity))
     isProgressBarLoading?.value = true
     userProfile?.mId.let {
         if (it != null) {
@@ -298,42 +298,42 @@ fun setStateIcon(
 ): Int {
     var iconId = 0
     when (event) {
-        org.eclipse.ecsp.helper.AppConstants.WINDOWS -> {
+        AppConstants.WINDOWS -> {
             iconId =
                 when (state.lowercase()) {
-                    org.eclipse.ecsp.helper.AppConstants.OPENED.lowercase() -> R.drawable.ic_windows_open
-                    org.eclipse.ecsp.helper.AppConstants.CLOSED.lowercase() -> R.drawable.ic_windows_closed
+                    AppConstants.OPENED.lowercase() -> R.drawable.ic_windows_open
+                    AppConstants.CLOSED.lowercase() -> R.drawable.ic_windows_closed
                     else -> R.drawable.ic_windows_ajar
                 }
         }
 
-        org.eclipse.ecsp.helper.AppConstants.LIGHT -> {
+        AppConstants.LIGHT -> {
             iconId =
                 when (state.lowercase()) {
-                    org.eclipse.ecsp.helper.AppConstants.ON.lowercase() -> R.drawable.ic_lights_on
-                    org.eclipse.ecsp.helper.AppConstants.OFF.lowercase() -> R.drawable.ic_lights_off
+                    AppConstants.ON.lowercase() -> R.drawable.ic_lights_on
+                    AppConstants.OFF.lowercase() -> R.drawable.ic_lights_off
                     else -> R.drawable.ic_flash_lights
                 }
         }
 
-        org.eclipse.ecsp.helper.AppConstants.DOOR -> {
+        AppConstants.DOOR -> {
             iconId =
                 when (state.lowercase()) {
-                    org.eclipse.ecsp.helper.AppConstants.LOCKED.lowercase() -> R.drawable.ic_door_locked
+                    AppConstants.LOCKED.lowercase() -> R.drawable.ic_door_locked
                     else -> R.drawable.ic_door_unlocked
                 }
         }
 
-        org.eclipse.ecsp.helper.AppConstants.TRUNK -> {
+        AppConstants.TRUNK -> {
             iconId =
                 when (state.lowercase()) {
-                    org.eclipse.ecsp.helper.AppConstants.UNLOCKED.lowercase() -> R.drawable.ic_trunk_open
+                    AppConstants.UNLOCKED.lowercase() -> R.drawable.ic_trunk_open
                     else -> R.drawable.ic_trunk_close
                 }
         }
 
-        org.eclipse.ecsp.helper.AppConstants.ALARM -> iconId = R.drawable.ic_alarm
-        org.eclipse.ecsp.helper.AppConstants.ENGINE -> iconId = R.drawable.ic_ignition
+        AppConstants.ALARM -> iconId = R.drawable.ic_alarm
+        AppConstants.ENGINE -> iconId = R.drawable.ic_ignition
     }
     return iconId
 }

@@ -90,7 +90,7 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         openDialog: MutableState<Triple<Boolean, String, String>>?,
     ) {
         when (eventTitleName) {
-            org.eclipse.ecsp.helper.AppConstants.WINDOWS, org.eclipse.ecsp.helper.AppConstants.LIGHT -> {
+            AppConstants.WINDOWS, AppConstants.LIGHT -> {
                 showBottomSheet?.value = Triple(true, eventTitleName, state)
             }
 
@@ -140,7 +140,7 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
                 }
             }
         } else {
-            lazyStaggeredGridList?.value = (ArrayList(org.eclipse.ecsp.helper.AppConstants.defaultRoValuesList))
+            lazyStaggeredGridList?.value = (ArrayList(AppConstants.defaultRoValuesList))
             notifyRoUpdate.value = notifyRoUpdate.value + 1
             val errorMessage = roEventHistoryResponse?.error?.message.toString()
             toastError(activity, Gson().fromJson<List<ROErrorMessage>>(errorMessage)[0].message)

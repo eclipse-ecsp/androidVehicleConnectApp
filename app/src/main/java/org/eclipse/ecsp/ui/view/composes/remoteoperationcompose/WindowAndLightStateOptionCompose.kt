@@ -52,9 +52,9 @@ fun WindowsAndLightStateCompose(
     secondItemColor: MutableState<Boolean>,
     firstItemColor: MutableState<Boolean>,
 ) {
-    val firstText = if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) org.eclipse.ecsp.helper.AppConstants.CLOSE else org.eclipse.ecsp.helper.AppConstants.OFF
-    val secText = if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) org.eclipse.ecsp.helper.AppConstants.AJAR else org.eclipse.ecsp.helper.AppConstants.FLASH
-    val thirdText = if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) org.eclipse.ecsp.helper.AppConstants.OPEN else org.eclipse.ecsp.helper.AppConstants.ON
+    val firstText = if (roType == AppConstants.WINDOWS) AppConstants.CLOSE else AppConstants.OFF
+    val secText = if (roType == AppConstants.WINDOWS) AppConstants.AJAR else AppConstants.FLASH
+    val thirdText = if (roType == AppConstants.WINDOWS) AppConstants.OPEN else AppConstants.ON
 
     Row(
         modifier =
@@ -72,7 +72,7 @@ fun WindowsAndLightStateCompose(
             secondItemColor = secondItemColor,
             firstItemColor = firstItemColor,
         )
-        if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) {
+        if (roType == AppConstants.WINDOWS) {
             SecondItem(
                 roType = roType,
                 title = secText,
@@ -102,9 +102,9 @@ fun FirstItem(
     secondItemColor: MutableState<Boolean>,
     firstItemColor: MutableState<Boolean>,
 ) {
-    val status = if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) org.eclipse.ecsp.helper.AppConstants.CLOSED else org.eclipse.ecsp.helper.AppConstants.OFF
+    val status = if (roType == AppConstants.WINDOWS) AppConstants.CLOSED else AppConstants.OFF
     val icon =
-        if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) R.drawable.ic_windows_closed else R.drawable.ic_lights_off
+        if (roType == AppConstants.WINDOWS) R.drawable.ic_windows_closed else R.drawable.ic_lights_off
     Column(
         modifier =
             Modifier
@@ -144,9 +144,9 @@ fun SecondItem(
     secondItemColor: MutableState<Boolean>,
     firstItemColor: MutableState<Boolean>,
 ) {
-    val status = if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) org.eclipse.ecsp.helper.AppConstants.AJAR else org.eclipse.ecsp.helper.AppConstants.FLASHING
+    val status = if (roType == AppConstants.WINDOWS) AppConstants.AJAR else AppConstants.FLASHING
     val icon =
-        if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) R.drawable.ic_windows_ajar else R.drawable.ic_flash_lights
+        if (roType == AppConstants.WINDOWS) R.drawable.ic_windows_ajar else R.drawable.ic_flash_lights
     Column(
         modifier =
             Modifier
@@ -192,9 +192,9 @@ fun ThirdItem(
     secondItemColor: MutableState<Boolean>,
     firstItemColor: MutableState<Boolean>,
 ) {
-    val status = if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) org.eclipse.ecsp.helper.AppConstants.OPENED else org.eclipse.ecsp.helper.AppConstants.ON
+    val status = if (roType == AppConstants.WINDOWS) AppConstants.OPENED else AppConstants.ON
     val icon =
-        if (roType == org.eclipse.ecsp.helper.AppConstants.WINDOWS) R.drawable.ic_windows_open else R.drawable.ic_lights_on
+        if (roType == AppConstants.WINDOWS) R.drawable.ic_windows_open else R.drawable.ic_lights_on
     Column(
         modifier =
             Modifier

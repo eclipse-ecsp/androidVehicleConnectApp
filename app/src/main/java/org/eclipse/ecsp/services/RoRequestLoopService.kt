@@ -95,7 +95,7 @@ class RoRequestLoopService(
         if (roEventHistoryResponse.status.requestStatus && roEventHistoryResponse.response != null) {
             val response = roEventHistoryResponse.response
             when (response?.roStatus) {
-                org.eclipse.ecsp.helper.AppConstants.PROCESSED_SUCCESS -> {
+                AppConstants.PROCESSED_SUCCESS -> {
                     val finalList =
                         remoteOperationService.updateGridItem(
                             response,
@@ -109,10 +109,10 @@ class RoRequestLoopService(
                     cancelJob()
                 }
 
-                org.eclipse.ecsp.helper.AppConstants.PENDING -> {
+                AppConstants.PENDING -> {
                     if (isRequestPendingLong(response.roEvents.timestamp!!)) {
                         Log.d("PENDING_STATE", "3 min over")
-                        response.roStatus = org.eclipse.ecsp.helper.AppConstants.FORCED_FAILURE
+                        response.roStatus = AppConstants.FORCED_FAILURE
                         val finalList =
                             remoteOperationService.updateGridItem(
                                 response,
@@ -137,7 +137,7 @@ class RoRequestLoopService(
                     }
                 }
 
-                org.eclipse.ecsp.helper.AppConstants.TTL_EXPIRED, org.eclipse.ecsp.helper.AppConstants.PROCESSED_FAILED -> {
+                AppConstants.TTL_EXPIRED, AppConstants.PROCESSED_FAILED -> {
                     val finalList =
                         remoteOperationService.updateGridItem(
                             response,
@@ -159,12 +159,12 @@ class RoRequestLoopService(
 
     private fun getEventType(eventId: String?): String  {
         return when (eventId) {
-            org.eclipse.ecsp.helper.AppConstants.WINDOW_EVENT_ID -> WINDOWS
-            org.eclipse.ecsp.helper.AppConstants.LIGHTS_EVENT_ID -> LIGHT
-            org.eclipse.ecsp.helper.AppConstants.ALARM_EVENT_ID -> ALARM
-            org.eclipse.ecsp.helper.AppConstants.DOOR_EVENT_ID -> DOOR
-            org.eclipse.ecsp.helper.AppConstants.ENGINE_EVENT_ID -> ENGINE
-            org.eclipse.ecsp.helper.AppConstants.TRUNK_EVENT_ID -> TRUNK
+            AppConstants.WINDOW_EVENT_ID -> WINDOWS
+            AppConstants.LIGHTS_EVENT_ID -> LIGHT
+            AppConstants.ALARM_EVENT_ID -> ALARM
+            AppConstants.DOOR_EVENT_ID -> DOOR
+            AppConstants.ENGINE_EVENT_ID -> ENGINE
+            AppConstants.TRUNK_EVENT_ID -> TRUNK
             else -> ""
         }
     }
