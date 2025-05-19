@@ -38,6 +38,7 @@ VehicleConnectApp has been written in Kotlin and compatible Android 7.0 (API lev
 1. Download the app source code and open the application using Android studio
 2. You can find the source code of app, how app is calling the SDK API's and you can reused for developing remote operations feature.
 3. Create you own server and using server side components and deploy relevant APIs and add server detail in environment file to run the app (path: app/src/main/assets/environment_file.json).
+4. Vehicle connect SDK is using OAuth Library for login flow, need to understand that shceme used in SDK manifest file and application environment_file.json file ( under Redirect URL session) should be same.
 
 ### Coding style check configuration
 
@@ -80,6 +81,11 @@ Please write to us at [csp@harman.com](mailto:csp@harman.com)
 
 Please read [CONTRIBUTING.md](https://github.com/eclipse-ecsp/androidVehicleConnectApp/blob/main/CONTRIBUTING.md) for details on how to raise an issue and submit a pull request to us.
 
+## Note
+License scanning for third-party libraries in the application excludes Firebase library dependencies.
+As Firebase libraries are not open source, they are rejected by the scanning tool. Consequently, these dependencies were removed from the dependency collection list prior to initiating the license scan.
+
+Firebase libraries are utilized to implement the notification flow within the application.
 
 ## License
 
