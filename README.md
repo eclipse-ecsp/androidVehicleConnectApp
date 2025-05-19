@@ -1,4 +1,5 @@
-![logo](https://github.com/user-attachments/assets/f6305af5-0f50-41f6-8c5a-28724e707da2)
+
+![logo](https://github.com/user-attachments/assets/d9df9f4f-d333-4925-a4d4-30df02242c03)
 
 # VehicleConnectApp
 
