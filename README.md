@@ -8,9 +8,7 @@
 [![Build](https://github.com/eclipse-ecsp/androidVehicleConnectApp/actions/workflows/android.yml/badge.svg)](https://github.com/eclipse-ecsp/androidVehicleConnectApp/actions/workflows/android.yml)
 [![License Compliance](https://github.com/eclipse-ecsp/androidVehicleConnectApp/actions/workflows/license-compliance.yml/badge.svg)](https://github.com/eclipse-ecsp/androidVehicleConnectApp/actions/workflows/license-compliance.yml)
 
-Vehicle Connect Application is a sample app built using the Android Vehicle Connect SDK. 
-It demonstrates the API interfaces for performing remote operations on vehicles and related components.
-Developers can use this sample as a reference to build their own remote operations applications.
+"The Vehicle Connect application is a sample app developed using the Android Vehicle Connect SDK. It showcases the API interfaces used to perform remote operations on vehicles and related components. Developers can use this sample as a reference for building their own remote operation applications.
 
 # Table of Contents
 * [Getting Started](#getting-started)
@@ -27,16 +25,20 @@ Developers can use this sample as a reference to build their own remote operatio
 
 
 ## Getting Started
-
-Take clone of the project by using the command (git clone https://github.com/eclipse-ecsp/androidVehicleConnectApp.git) and setup the Android studio latest version.
+Take clone of the project using the command (git clone https://github.com/eclipse-ecsp/androidVehicleConnectApp.git) and setup android studio and load the project.
 This app demonstrate the use of vehicleConnectSDK functions.
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-The Vehicle Connect App is developed in Kotlin and is compatible with Android devices running version 7.0 (API level 24) or higher.
+The list of tools required to build and run the project:
+* Java 1.8
+* Android Studio
   
 ### Installation
+
+* [Install Android Studio](https://developer.android.com/studio)
+* [Install Java 17](https://www.azul.com/downloads/?version=java-17-lts&package=jdk#zulu)
 
 1. Download the app source code and open the application using Android studio
 2. You can find the app’s source code, including how it interacts with the SDK APIs. This can be reused as a reference for developing your own remote operations features.
@@ -45,19 +47,20 @@ The Vehicle Connect App is developed in Kotlin and is compatible with Android de
 
 ### Coding style check configuration
 
-Check the Coding Guideline document
-[Android Coding Guidelines.pdf](https://github.com/user-attachments/files/16709676/Android.Coding.Guidelines.pdf)
-Use android lint for code warnings
+Check the Coding Guideline document: [Android Coding Guidelines.pdf](./Android.Coding.Guidelines.pdf)
+Use android lint for code warnings and errors
 
 ### Deployment
 
-You can create the APK or AAB file using android studio, and install the apk file on Android device which support Android 7.0 (API level 24) or above.
+Clone the project from GitHub, open it in Android Studio, run a Gradle sync, and then perform a rebuild process.
+Generate the APK or AAB file using Android Studio, and install the APK on an Android device running Android 7.0 (API level 24) or higher.
+Navigate through the application screens to explore the vehicle features supported by the Vehicle Connect SDK.
 
 ## Built With Dependencies
 
 * [VehicleConnectSDK](https://github.com/eclipse-ecsp/androidVehicleConnectSDK) - Vehicle Connect SDK library
 * [Retrofit](https://github.com/square/retrofit)- For network operation Management
-* [Android Lint tool] - Coding convention and style guide
+* [Android Lint tool](https://developer.android.com/studio/write/lint) - Coding convention and style guide
 
 
 ## How to contribute

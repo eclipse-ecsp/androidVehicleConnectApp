@@ -40,6 +40,7 @@ import androidx.navigation.NavHostController
 import org.eclipse.ecsp.R
 import org.eclipse.ecsp.helper.AppConstants.ASSOCIATED
 import org.eclipse.ecsp.helper.AppConstants.ASSOCIATION_INITIATED
+import org.eclipse.ecsp.helper.AppConstants.getVehicleStatus
 import org.eclipse.ecsp.models.dataclass.VehicleProfileModel
 import org.eclipse.ecsp.models.viewmodels.VehicleProfileVM
 import org.eclipse.ecsp.ui.theme.Black
@@ -302,12 +303,7 @@ fun Activity.VehicleProfileMainCompose(
                     .fillMaxWidth()
                     .padding(top = 15.dp, start = 20.dp, end = 20.dp)
                     .height(20.dp).testTag("vehicle_status_tag"),
-            text =
-                when (vehicleProfileModel?.associatedDevice?.mAssociationStatus) {
-                    ASSOCIATED -> "Active"
-                    ASSOCIATION_INITIATED -> "Activation Pending"
-                    else -> "Disassociated"
-                },
+            text = getVehicleStatus(vehicleProfileModel?.associatedDevice?.mAssociationStatus),
             color = DarkGray,
             fontSize = 16.sp,
         )

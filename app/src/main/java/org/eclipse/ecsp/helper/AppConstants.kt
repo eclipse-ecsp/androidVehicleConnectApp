@@ -214,4 +214,14 @@ object AppConstants {
             apply()
         }
     }
+
+    fun getVehicleStatus(status: String?): String{
+        return when(status){
+            DISASSOCIATED -> "Disassociated"
+            ASSOCIATED -> "Active"
+            ASSOCIATION_INITIATED -> "Pending"
+            SUSPENDED -> "Suspended"
+            else -> "No Status"
+        }
+    }
 }

@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.eclipse.ecsp.R
+import org.eclipse.ecsp.helper.AppConstants
 import org.eclipse.ecsp.models.dataclass.VehicleProfileModel
 import org.eclipse.ecsp.ui.theme.Black
 import org.eclipse.ecsp.ui.theme.LightBlue
@@ -219,10 +220,11 @@ fun VehicleSelectionListView(
                                 defaultElevation = 6.dp,
                             ),
                     ) {
+                        val vehicleStatus = AppConstants.getVehicleStatus(item?.associatedDevice?.mAssociationStatus)
                         Text(
                             text = (
-                                item?.vehicleDetailData?.vehicleAttributes?.name
-                                    ?: "No Device Id"
+                                "${item?.vehicleDetailData?.vehicleAttributes?.name
+                                    ?: "No Device Id"}-$vehicleStatus"
                             ),
                             modifier =
                                 Modifier
