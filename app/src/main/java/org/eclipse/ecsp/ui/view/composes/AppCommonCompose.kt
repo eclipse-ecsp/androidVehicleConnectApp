@@ -1,4 +1,5 @@
 package org.eclipse.ecsp.ui.view.composes
+
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -54,26 +55,29 @@ fun TopBar(
             Text(topBarTextString, color = Black, fontWeight = FontWeight.Bold)
         },
         navigationIcon = {
-            IconButton(onClick = onClicked) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_arrow),
-                    contentDescription = "Back",
-                    modifier = Modifier.testTag("top_bar_back_arrow_icon_tag"),
-                )
-            }
+            if (topBarTextString != "Remote Control")
+                IconButton(onClick = onClicked) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_arrow),
+                        contentDescription = "Back",
+                        modifier = Modifier.testTag("top_bar_back_arrow_icon_tag"),
+                    )
+                }
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = White),
         modifier =
-            Modifier.drawWithContent {
-                drawContent()
-                val strokeWidth = 2.dp.value * density
-                val y = size.height - strokeWidth / 2
-                drawLine(
-                    DarkGray,
-                    Offset((textFieldPadding).toPx(), y),
-                    Offset(size.width - textFieldPadding.toPx(), y),
-                )
-            }.testTag("topBar_tag"),
+            Modifier
+                .drawWithContent {
+                    drawContent()
+                    val strokeWidth = 2.dp.value * density
+                    val y = size.height - strokeWidth / 2
+                    drawLine(
+                        DarkGray,
+                        Offset((textFieldPadding).toPx(), y),
+                        Offset(size.width - textFieldPadding.toPx(), y),
+                    )
+                }
+                .testTag("topBar_tag"),
     )
 }
 

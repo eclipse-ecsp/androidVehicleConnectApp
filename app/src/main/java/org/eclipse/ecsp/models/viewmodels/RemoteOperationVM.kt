@@ -235,12 +235,16 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         dashboardRepository.getRemoteOperationHistory(userId, vehicleId)
             .observe(lifecycleOwner) { roEventHistoryResponse ->
                 isProgressBarLoading?.value = false
-                updateListOnRoHistory(
-                    activity,
-                    roEventHistoryResponse,
-                    lazyStaggeredGridList,
-                    notifyRoUpdate,
-                )
+                if(roEventHistoryResponse.status.requestStatus) {
+                    updateListOnRoHistory(
+                        activity,
+                        roEventHistoryResponse,
+                        lazyStaggeredGridList,
+                        notifyRoUpdate,
+                    )
+                } else{
+                    toastError(activity, "RO History: ${roEventHistoryResponse.error?.message ?: "Error occurred"}")
+                }
             }
     }
 

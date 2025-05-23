@@ -62,7 +62,7 @@ import org.eclipse.ecsp.ui.view.composes.TopBar
 import org.eclipse.ecsp.ui.view.composes.dashboardcompose.BottomNavigationBar
 import org.eclipse.ecsp.ui.view.composes.dashboardcompose.ShowChangePasswordConfirmationDialogBox
 import org.eclipse.ecsp.ui.view.composes.dashboardcompose.ShowConfirmationDialogBox
-import org.eclipse.ecsp.ui.view.composes.dashboardcompose.mainCompose
+import org.eclipse.ecsp.ui.view.composes.dashboardcompose.MainCompose
 import org.eclipse.ecsp.userservice.service.UserServiceInterface
 
 /**
@@ -138,7 +138,8 @@ class DashboardActivity : BaseAppActivity() {
         setContent {
             remoteOperationVM.getRoHistoryData().observeAsState().value.let {
                 if (isInternetAvailable(this)) {
-                    if (it != null) getRoHistory(it)
+                    if (it != null)
+                        getRoHistory(it)
                 } else {
                     toastError(this, "No internet connectivity")
                 }
@@ -157,11 +158,11 @@ class DashboardActivity : BaseAppActivity() {
                     mutableStateOf(-1)
                 }
             processVehicleList(
-                Gson().fromJson(
+                HashMap(Gson().fromJson<Map<String, VehicleProfileModel?>>(
                     AppConstants.getVehicleList(
                         this@DashboardActivity,
-                    ),
-                ),
+                    )
+                ))
             )
             LaunchedEffect(Unit) {
                 dashboardVM.fetchAssociateDeviceList()
@@ -192,7 +193,7 @@ class DashboardActivity : BaseAppActivity() {
                             BottomNavigationBar(navController = navController)
                         },
                         content = { padding ->
-                            mainCompose(
+                            MainCompose(
                                 this,
                                 padding = padding,
                                 navController,
@@ -281,7 +282,7 @@ class DashboardActivity : BaseAppActivity() {
 //            dashboardVM.subscribeNotificationConfig(emailId?:"", it)
             isProgressBarLoading.value = false
             it.let {
-                AppConstants.setVehicleList(this@DashboardActivity, Gson().toJson(it))
+                AppConstants.setVehicleList(this@DashboardActivity, Gson().toJson(it.second))
                 processVehicleList(it.second)
             }
         }

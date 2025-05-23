@@ -1,4 +1,5 @@
 package org.eclipse.ecsp.ui.view.composes.dashboardcompose
+
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -28,6 +29,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +57,7 @@ import org.eclipse.ecsp.ui.theme.DarkGray
 import org.eclipse.ecsp.ui.theme.LightBlue
 import org.eclipse.ecsp.ui.theme.White
 import org.eclipse.ecsp.ui.view.composes.deviceinstallationcompose.ProgressBar
+import org.eclipse.ecsp.ui.view.composes.notificationcompose.NotificationMainCompose
 import org.eclipse.ecsp.ui.view.composes.remoteoperationcompose.BottomSheetOptionsRoCompose
 import org.eclipse.ecsp.ui.view.composes.remoteoperationcompose.RemoteOperationScreen
 
@@ -67,9 +70,8 @@ fun BottomNavigationBar(navController: NavController) {
     NavigationBar {
         val navBackStackEntry = navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry.value?.destination?.route
-        BottomNavItem::class.sealedSubclasses.map {
-            it.objectInstance as BottomNavItem
-        }.forEach { navItem ->
+        val bottomItemList = listOf(BottomNavItem.RemoteOperation, BottomNavItem.Settings)
+        bottomItemList.forEach { navItem ->
             val selected = currentRoute == navItem.route
             NavigationBarItem(
                 selected = selected,
@@ -117,6 +119,7 @@ fun Activity.NavHostContainer(
     openConfirmationDialog: MutableState<Boolean>?,
     notifyRoUpdate: MutableState<Int>,
     lifecycleOwner: LifecycleOwner,
+    alertList: MutableState<ArrayList<AlertData>>,
     passwordChangeDialog: MutableState<Boolean>?
 ) {
     NavHost(
@@ -148,7 +151,6 @@ fun Activity.NavHostContainer(
                 passwordChangeDialog
             )
         }
-        // disabled for current iteration
         /*composable(BottomNavItem.Notification.route) {
             NotificationMainCompose(
                 dashboardVM,
@@ -164,7 +166,7 @@ fun Activity.NavHostContainer(
 }
 
 @Composable
-fun mainCompose(
+fun MainCompose(
     activity: Activity,
     padding: PaddingValues,
     navController: NavHostController,
@@ -195,35 +197,50 @@ fun mainCompose(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
+        LaunchedEffect(showVehicleList.value.second) {
+
+        }
 //        if (showVehicleList.value.first) {
-            VehicleSelectionListView(
-                vehicleList = showVehicleList.value.second,
-                selectedVehicleId?.value!!.first,
-                selectedVehicleId.value.second,
-                onVehicleSelection = { vehicleProfileModel, index ->
-                    selectedVehicleId.value =
-                        Triple(
-                            vehicleProfileModel?.associatedDevice?.mDeviceId.toString(),
-                            vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
-                                ?: "No Name",
-                            vehicleProfileModel?.vehicleDetailData?.vehicleId.toString(),
-                        )
-                    selectedVehicleIndex?.value = index
-                    if (navController.currentBackStackEntry?.destination?.route == BottomNavItem.RemoteOperation.route) {
-                        notifyRoUpdate.value = notifyRoUpdate.value + 1
-                        remoteOperationVM.clickOnRoHistory(selectedVehicleId.value.first)
-                    }
-                },
-            ) {
-                launchActivity()
-            }
+        VehicleSelectionListView(
+            vehicleList = showVehicleList.value.second,
+            selectedVehicleId?.value!!.first,
+            selectedVehicleId.value.second,
+            onVehicleSelection = { vehicleProfileModel, index ->
+                selectedVehicleId.value =
+                    Triple(
+                        vehicleProfileModel?.associatedDevice?.mDeviceId.toString(),
+                        vehicleProfileModel?.vehicleDetailData?.vehicleAttributes?.name
+                            ?: "No Name",
+                        vehicleProfileModel?.vehicleDetailData?.vehicleId.toString(),
+                    )
+                selectedVehicleIndex?.value = index
+                if (navController.currentBackStackEntry?.destination?.route == BottomNavItem.RemoteOperation.route) {
+                    notifyRoUpdate.value = notifyRoUpdate.value + 1
+                    remoteOperationVM.clickOnRoHistory(selectedVehicleId.value.first)
+                }
+            },
+        ) {
+            launchActivity()
+        }
 //        }
         activity.NavHostContainer(
             activity,
-            navController = navController, dashboardVM, remoteOperationVM, notificationVM,
-            vehicleProfileList = vehicleProfileList, isProgressBarLoading, showBottomSheet,
-            openDialog, selectedVehicleId, lazyStaggeredGridList,
-            showVehicleList, openConfirmationDialog, notifyRoUpdate, lifecycleOwner,passwordChangeDialog
+            navController = navController,
+            dashboardVM,
+            remoteOperationVM,
+            notificationVM,
+            vehicleProfileList = vehicleProfileList,
+            isProgressBarLoading,
+            showBottomSheet,
+            openDialog,
+            selectedVehicleId,
+            lazyStaggeredGridList,
+            showVehicleList,
+            openConfirmationDialog,
+            notifyRoUpdate,
+            lifecycleOwner,
+            alertList,
+            passwordChangeDialog
         )
 
         isProgressBarLoading?.value?.let {
@@ -285,7 +302,8 @@ fun mainCompose(
                                 AJAR
                             } else {
                                 showBottomSheet.value.third
-                            }}",
+                            }
+                        }",
                         Toast.LENGTH_LONG,
                     ).show()
                 }

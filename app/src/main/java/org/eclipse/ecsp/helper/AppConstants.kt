@@ -44,6 +44,8 @@ object AppConstants {
     const val UNLOCKED = "Unlocked"
     const val STARTED = "Started"
     const val STOPPED = "Stopped"
+    const val IGNITION_ENABLED = "IGNITION_ENABLED"
+    const val IGNITION_DISABLED = "IGNITION_DISABLED"
 
     const val WINDOWS = "Windows"
     const val LIGHT = "Lights"

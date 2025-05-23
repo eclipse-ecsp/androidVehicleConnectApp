@@ -61,6 +61,8 @@ class RemoteOperationService {
                         AppConstants.STARTED.lowercase() -> AppConstants.STOPPED
                         AppConstants.STOPPED.lowercase() -> AppConstants.STARTED
                         AppConstants.PARTIAL_OPENED.lowercase() -> AppConstants.getWindowCurrentState(activity)
+                        AppConstants.IGNITION_ENABLED.lowercase() -> AppConstants.STOPPED
+                        AppConstants.IGNITION_DISABLED.lowercase() -> AppConstants.STARTED
                         else -> ""
                     }
             }
