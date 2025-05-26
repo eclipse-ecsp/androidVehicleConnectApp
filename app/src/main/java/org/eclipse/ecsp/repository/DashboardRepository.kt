@@ -218,11 +218,15 @@ class DashboardRepository {
                     deviceCall.await()?.forEach {
                         if (it.mDeviceId != null) {
                             vehicleServiceInterface.getVehicleProfile(it.mDeviceId!!) { vehicleProfileData ->
-                                list[it.mDeviceId!!] =
-                                    VehicleProfileModel(
-                                        it,
-                                        vehicleProfileData.response?.data?.get(0)
-                                    )
+                                if (vehicleProfileData.response != null
+                                    && vehicleProfileData.response?.data != null
+                                    && vehicleProfileData.response!!.data!!.isNotEmpty()) {
+                                    list[it.mDeviceId!!] =
+                                        VehicleProfileModel(
+                                            it,
+                                            vehicleProfileData.response?.data?.get(0)
+                                        )
+                                }
                             }
                             success = true
                         }

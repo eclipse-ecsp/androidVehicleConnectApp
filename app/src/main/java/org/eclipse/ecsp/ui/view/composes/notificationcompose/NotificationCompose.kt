@@ -90,7 +90,7 @@ fun Activity.NotificationMainCompose(
     alertList: MutableState<ArrayList<AlertData>>,
     isProgressBarLoading: MutableState<Boolean>?,
     vehicleProfileDataList: MutableState<HashMap<String, VehicleProfileModel?>>?,
-    selectedVehicleId: MutableState<Pair<String, String>>?,
+    selectedVehicleId: MutableState<Triple<String, String, String>>?,
     lifecycleOwner: LifecycleOwner,
 ) {
     LaunchedEffect(Unit) {
@@ -225,7 +225,7 @@ private fun getAlertHistoryData(
     notificationVM: NotificationVM,
     isProgressBarLoading: MutableState<Boolean>?,
     vehicleProfileDataList: MutableState<HashMap<String, VehicleProfileModel?>>?,
-    selectedVehicleId: MutableState<Pair<String, String>>?,
+    selectedVehicleId: MutableState<Triple<String,String, String>>?,
     alertList: MutableState<ArrayList<AlertData>>,
     lifecycleOwner: LifecycleOwner,
 ) {
