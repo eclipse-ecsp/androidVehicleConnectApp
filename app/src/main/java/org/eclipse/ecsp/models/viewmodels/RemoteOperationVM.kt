@@ -21,7 +21,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.eclipse.ecsp.helper.response.CustomMessage
 import org.eclipse.ecsp.roservice.model.RemoteOperationState
 import org.eclipse.ecsp.roservice.model.RoEventHistoryResponse
@@ -232,20 +234,20 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         userId: String,
         vehicleId: String,
     ) {
-        dashboardRepository.getRemoteOperationHistory(userId, vehicleId)
-            .observe(lifecycleOwner) { roEventHistoryResponse ->
-                isProgressBarLoading?.value = false
-                if(roEventHistoryResponse.status.requestStatus) {
-                    updateListOnRoHistory(
-                        activity,
-                        roEventHistoryResponse,
-                        lazyStaggeredGridList,
-                        notifyRoUpdate,
-                    )
-                } else{
-                    toastError(activity, "RO History: ${roEventHistoryResponse.error?.message ?: "Error occurred"}")
-                }
+        viewModelScope.launch {
+            val roEventHistoryResponse = dashboardRepository.getRemoteOperationHistory(userId, vehicleId)
+            isProgressBarLoading?.value = false
+            if(roEventHistoryResponse.status.requestStatus){
+                updateListOnRoHistory(
+                    activity,
+                    roEventHistoryResponse,
+                    lazyStaggeredGridList,
+                    notifyRoUpdate,
+                )
+            } else {
+                toastError(activity, "RO History: ${roEventHistoryResponse.error?.message ?: "Error occurred"}")
             }
+        }
     }
 
     /*fun cancelJob() {
@@ -326,13 +328,14 @@ class RemoteOperationVM(activity: Activity) : AndroidViewModel(activity.applicat
         duration: Int? = null,
         isFromClickAction: Boolean = false,
     ) {
-        dashboardRepository.updateRoState(
-            userId,
-            vehicleId,
-            remoteOperationState,
-            percentage,
-            duration,
-        ).observe(lifecycleOwner) { roStatusResponse ->
+        viewModelScope.launch {
+            val roStatusResponse = dashboardRepository.updateRoState(
+                userId,
+                vehicleId,
+                remoteOperationState,
+                percentage,
+                duration,
+            )
             isProgressBarLoading?.value = false
             if (!isFromClickAction) {
                 updateROStatus(

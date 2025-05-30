@@ -1,4 +1,5 @@
 package org.eclipse.ecsp.models.viewmodels
+
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -17,6 +18,7 @@ package org.eclipse.ecsp.models.viewmodels
  ********************************************************************************/
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +32,7 @@ import org.eclipse.ecsp.helper.response.CustomMessage
 import org.eclipse.ecsp.notificationservice.model.ChannelData
 import org.eclipse.ecsp.notificationservice.model.NotificationConfigData
 import org.eclipse.ecsp.userservice.service.UserServiceInterface
+import java.lang.ref.WeakReference
 
 /**
  * Represents the Dashboard ViewModel
@@ -40,13 +43,14 @@ import org.eclipse.ecsp.userservice.service.UserServiceInterface
  */
 class DashboardVM(activity: Activity) : AndroidViewModel(activity.application) {
     private var topBarTitle = MutableLiveData("")
-    private var _associatedDeviceList = MutableLiveData<Pair<Boolean,HashMap<String, VehicleProfileModel?>>>()
+    private var _associatedDeviceList = MutableLiveData<HashMap<String, VehicleProfileModel?>>()
     private val dashboardRepository: DashboardRepository by lazy {
         DashboardRepository()
     }
     private var isSignOutClicked = MutableLiveData(false)
     private var _isPasswordChangeTriggered = MutableLiveData(false)
     private var passwordChangeStatus = MutableLiveData<CustomMessage<Any>>()
+    private var weakReference = WeakReference(activity)
 
     /**
      * Represents to get the title value of the screens
@@ -71,16 +75,30 @@ class DashboardVM(activity: Activity) : AndroidViewModel(activity.application) {
      *
      * @return [HashMap] of [VehicleProfileModel] LiveData
      */
-    fun getAssociatedDeviceList(): LiveData<Pair<Boolean,HashMap<String, VehicleProfileModel?>>>  {
+    fun getAssociatedDeviceList(): LiveData<HashMap<String, VehicleProfileModel?>> {
         return _associatedDeviceList
     }
 
     /**
      * Represents to set the associated vehicle list to [_associatedDeviceList]
+     * Function is calling both associated vehicle list and respective vehicles profile data API
      *
      */
     fun fetchAssociateDeviceList() {
-        _associatedDeviceList = dashboardRepository.associateDeviceList()
+        viewModelScope.launch {
+            val deviceList = dashboardRepository.getAssociatedDeviceList()
+            if (deviceList != null) {
+                val vehicleProfileData = dashboardRepository.getVehicleProfileData(deviceList)
+                if (vehicleProfileData.isNotEmpty())
+                    _associatedDeviceList.postValue(vehicleProfileData)
+                else
+                    Toast.makeText(weakReference.get(), "Vehicle Profile API failed during operation ", Toast.LENGTH_SHORT)
+                        .show()
+            } else {
+                Toast.makeText(weakReference.get(), "Device list API failed", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
     /**
@@ -131,17 +149,21 @@ class DashboardVM(activity: Activity) : AndroidViewModel(activity.application) {
 
     fun isPasswordChangeTriggered(): LiveData<Boolean> = _isPasswordChangeTriggered
 
-    fun setPasswordChangeTriggerValue(value: Boolean){
+    fun setPasswordChangeTriggerValue(value: Boolean) {
         _isPasswordChangeTriggered.value = value
     }
 
-    fun changePasswordApiCall(userServiceInterface: UserServiceInterface): LiveData<CustomMessage<Any>>{
+    fun changePasswordApiCall(userServiceInterface: UserServiceInterface): LiveData<CustomMessage<Any>> {
         val exception =
             CoroutineExceptionHandler { _, exception ->
                 Log.e("Password change request API failed: ", exception.cause.toString())
             }
         viewModelScope.launch(exception) {
-            passwordChangeStatus.postValue(dashboardRepository.requestForChangePassword(userServiceInterface))
+            passwordChangeStatus.postValue(
+                dashboardRepository.requestForChangePassword(
+                    userServiceInterface
+                )
+            )
         }
         return passwordChangeStatus
     }

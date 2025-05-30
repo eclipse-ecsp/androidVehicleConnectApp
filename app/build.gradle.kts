@@ -15,8 +15,8 @@ android {
         applicationId = "org.eclipse.ecsp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 16
-        versionName = "3.5"
+        versionCode = 18
+        versionName = "3.8"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -68,8 +68,7 @@ android {
 
 dependencies {
 
-    implementation("org.eclipse.ecsp:vehicleconnectsdk:1.1.5")
-//    implementation(files("libs/androidVehicleConnectSDK.aar"))
+    implementation("org.eclipse.ecsp:vehicleconnectsdk:1.1.7")
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation("androidx.compose.ui:ui:1.5.0")
@@ -105,5 +104,5 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation(kotlin("reflect"))
 
-    implementation("com.google.firebase:firebase-messaging:24.0.0")
+    implementation("com.google.firebase:firebase-messaging:24.1.1")
 }

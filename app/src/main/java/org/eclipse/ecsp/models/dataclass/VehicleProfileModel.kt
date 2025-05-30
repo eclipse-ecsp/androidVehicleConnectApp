@@ -29,5 +29,5 @@ import org.eclipse.ecsp.vehicleservice.model.vehicleprofile.VehicleDetailData
 @Parcelize
 data class VehicleProfileModel(
     var associatedDevice: AssociatedDevice,
-    var vehicleDetailData: VehicleDetailData?,
+    var vehicleDetailData: VehicleDetailData?=null,
 ) : Parcelable

@@ -224,7 +224,7 @@ fun VehicleSelectionListView(
                         val vehicleStatus = AppConstants.getVehicleStatus(item?.associatedDevice?.mAssociationStatus)
                         Text(
                             text = (
-                                "${item?.vehicleDetailData?.vehicleAttributes?.name
+                                "${item?.vehicleDetailData?.vehicleAttributes?.name ?: item?.associatedDevice?.mDeviceId
                                     ?: "No Device Id"}-$vehicleStatus"
                             ),
                             modifier =
