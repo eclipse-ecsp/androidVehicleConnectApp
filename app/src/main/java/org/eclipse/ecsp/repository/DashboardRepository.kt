@@ -16,6 +16,7 @@ package org.eclipse.ecsp.repository
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import org.eclipse.ecsp.helper.AppConstants.DISASSOCIATED
@@ -24,9 +25,14 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
+import kotlinx.coroutines.supervisorScope
 import org.eclipse.ecsp.helper.response.CustomMessage
+import org.eclipse.ecsp.helper.response.error.CustomError
+import org.eclipse.ecsp.helper.response.error.Status
 import org.eclipse.ecsp.notificationservice.model.AlertAnalysisData
 import org.eclipse.ecsp.notificationservice.model.NotificationConfigData
 import org.eclipse.ecsp.notificationservice.service.NotificationServiceInterface
@@ -59,24 +65,24 @@ class DashboardRepository {
      * @param userId as [String]
      * @param vehicleId as [String]
      * @param roRequestId Ro request id as [String]
-     * @return [MutableLiveData] of [RoEventHistoryResponse]'s [CustomMessage]
+     * @return [CustomMessage]
      */
-    fun checkRoRequestStatus(
+    suspend fun checkRoRequestStatus(
         userId: String,
         vehicleId: String,
         roRequestId: String,
-    ): MutableLiveData<CustomMessage<RoEventHistoryResponse>> {
-        val data = MutableLiveData<CustomMessage<RoEventHistoryResponse>>()
-        val exception =
-            CoroutineExceptionHandler { _, exception ->
-                Log.e("RO Request Status API failed: ", exception.cause.toString())
-            }
-        CoroutineScope(Dispatchers.IO).launch(exception) {
-            roServiceInterface.checkRemoteOperationRequestStatus(userId, vehicleId, roRequestId) {
-                data.postValue(it)
-            }
+    ): CustomMessage<RoEventHistoryResponse> {
+        var resp = CustomMessage<RoEventHistoryResponse>(Status.Failure)
+        try {
+            resp = roServiceInterface.checkRemoteOperationRequestStatus(userId, vehicleId, roRequestId)
+        } catch (exception: Exception) {
+            Log.e("RO Request Status API failed: ", exception.printStackTrace().toString())
+            CustomMessage<RoEventHistoryResponse>(
+                Status.Failure,
+                CustomError.Generic(exception.printStackTrace().toString())
+            )
         }
-        return data
+        return resp
     }
 
     /**
@@ -87,30 +93,30 @@ class DashboardRepository {
      * @param remoteOperationState [RemoteOperationState] value
      * @param percentage as [Long]
      * @param duration as [Long]
-     * @return
+     * @return [CustomMessage]
      */
-    fun updateRoState(
+    suspend fun updateRoState(
         userId: String,
         vehicleId: String,
         remoteOperationState: RemoteOperationState,
         percentage: Int? = null,
         duration: Int? = null,
-    ): MutableLiveData<CustomMessage<RoStatusResponse>> {
-        val data = MutableLiveData<CustomMessage<RoStatusResponse>>()
-        val exception =
-            CoroutineExceptionHandler { _, exception ->
-                Log.e("RO State Update API failed: ", exception.cause.toString())
-            }
-        CoroutineScope(Dispatchers.IO).launch(exception) {
-            roServiceInterface.updateROStateRequest(
+    ): CustomMessage<RoStatusResponse> {
+        var data: CustomMessage<RoStatusResponse>
+        try {
+            data = roServiceInterface.updateROStateRequest(
                 userId,
                 vehicleId,
                 percentage,
                 duration,
                 remoteOperationState,
-            ) {
-                data.postValue(it)
-            }
+            )
+        } catch (exception: Exception) {
+            Log.e("RO State Update API failed: ", exception.printStackTrace().toString())
+            data = CustomMessage(
+                Status.Failure,
+                CustomError.Generic(exception.printStackTrace().toString())
+            )
         }
         return data
     }
@@ -120,23 +126,23 @@ class DashboardRepository {
      *
      * @param userId as [String]
      * @param vehicleId as [String]
-     * @return [MutableLiveData] of [RoEventHistoryResponse]'s [CustomMessage]
+     * @return [CustomMessage]
      */
-    fun getRemoteOperationHistory(
+    suspend fun getRemoteOperationHistory(
         userId: String,
         vehicleId: String,
-    ): MutableLiveData<CustomMessage<List<RoEventHistoryResponse>>> {
-        val data = MutableLiveData<CustomMessage<List<RoEventHistoryResponse>>>()
-        val exception =
-            CoroutineExceptionHandler { _, exception ->
-                Log.e("RO History Status API failed: ", exception.cause.toString())
-            }
-        CoroutineScope(Dispatchers.IO).launch(exception) {
-            roServiceInterface.getRemoteOperationHistory(userId, vehicleId) {
-                data.postValue(it)
-            }
+    ): CustomMessage<List<RoEventHistoryResponse>> {
+        var resp: CustomMessage<List<RoEventHistoryResponse>>
+        try {
+            resp =  roServiceInterface.getRemoteOperationHistory(userId, vehicleId)
+        } catch (exception: Exception) {
+            Log.e("RO History Status API failed: ", exception.printStackTrace().toString())
+            resp = CustomMessage(
+                Status.Failure,
+                CustomError.Generic(exception.printStackTrace().toString())
+            )
         }
-        return data
+        return resp
     }
 
     /**
@@ -182,45 +188,49 @@ class DashboardRepository {
     }
 
     /**
-     * Functions is to get the associated device list using SDK Api
+     * Function is to fetch the associated device list
      *
-     * @return [MutableLiveData] of [HashMap]
+     * @return [List] of [AssociatedDevice]
      */
-    fun associateDeviceList(): MutableLiveData<Pair<Boolean, HashMap<String, VehicleProfileModel?>>> {
-        val data = MutableLiveData<Pair<Boolean, HashMap<String, VehicleProfileModel?>>>()
-        val exception =
-            CoroutineExceptionHandler { _, exception ->
-                Log.e(
-                    "Device association list and vehicle profile API failed: ",
-                    exception.cause.toString(),
-                )
-            }
-        CoroutineScope(Dispatchers.IO).launch(exception) {
-            val list = HashMap<String, VehicleProfileModel?>()
-            val deviceCall =
-                async {
-                    var deviceAssociationListData: List<AssociatedDevice>? =
-                        null
-                    vehicleServiceInterface.associatedDeviceList {
-                        if (it.response != null) {
-                            deviceAssociationListData =
-                                it.response?.data?.filter { deviceList ->
-                                    deviceList.mDeviceId != null && deviceList.mAssociationStatus != DISASSOCIATED
-                                }
-                        }
+    suspend fun getAssociatedDeviceList(): List<AssociatedDevice>? {
+        var data: List<AssociatedDevice>? = null
+        try {
+            val result = vehicleServiceInterface.associatedDeviceList()
+            if (result.status.requestStatus && result.response != null) {
+                data =
+                    result.response?.data?.filter { deviceList ->
+                        deviceList.mDeviceId != null && deviceList.mAssociationStatus != DISASSOCIATED
                     }
-                    return@async deviceAssociationListData
-                }
+            }
 
-            val vehicleProfileDataCall: Deferred<Pair<Boolean, HashMap<String, VehicleProfileModel?>>> =
-                async {
-                    var success = false
-                    deviceCall.await()?.forEach {
-                        if (it.mDeviceId != null) {
-                            vehicleServiceInterface.getVehicleProfile(it.mDeviceId!!) { vehicleProfileData ->
+        } catch (exception: Exception) {
+            Log.e(
+                "Device association list API failed: ", exception.cause.toString(),
+            )
+        }
+        return data
+    }
+
+    /**
+     * Function is to fetch the vehicle profile data of each associated device.
+     *
+     * @param deviceList contains all the associated device which are not DISASSOCIATED
+     * @return [HashMap] of [VehicleProfileModel] which contains only the device which having the device id
+     */
+    suspend fun getVehicleProfileData(deviceList: List<AssociatedDevice>): HashMap<String, VehicleProfileModel?> {
+        val list = HashMap<String, VehicleProfileModel?>()
+        try {
+            supervisorScope {
+                deviceList.forEach {
+                    launch {
+                        try {
+                            if (it.mDeviceId != null) {
+                                list[it.mDeviceId!!] = VehicleProfileModel(it)
+                                val vehicleProfileData = vehicleServiceInterface.getVehicleProfile(it.mDeviceId!!)
                                 if (vehicleProfileData.response != null
                                     && vehicleProfileData.response?.data != null
-                                    && vehicleProfileData.response!!.data!!.isNotEmpty()) {
+                                    && vehicleProfileData.response!!.data!!.isNotEmpty()
+                                ) {
                                     list[it.mDeviceId!!] =
                                         VehicleProfileModel(
                                             it,
@@ -228,17 +238,22 @@ class DashboardRepository {
                                         )
                                 }
                             }
-                            success = true
+                        } catch (e: Exception) {
+                            Log.e(
+                                "Vehicle Profile API failed for ${it.mDeviceId}: ",
+                                e.cause.toString(),
+                            )
                         }
-                    }?.let {
-                        success = false
                     }
-                    return@async Pair(success, list)
                 }
-
-            data.postValue(vehicleProfileDataCall.await())
+            }
+        } catch (e: Exception) {
+            Log.e(
+                "Vehicle Profile API failed by coroutine cancellation: ",
+                e.cause.toString(),
+            )
         }
-        return data
+        return list
     }
 
     /**
@@ -255,18 +270,22 @@ class DashboardRepository {
     ) {
         val exception =
             CoroutineExceptionHandler { _, exception ->
-                Log.e("Notification config data subscribe API failed: ", exception.cause.toString())
+                Log.e(
+                    "NOTIFICATION_SUBSCRIPTION API",
+                    "Notification config data subscribe API failed: ${exception.cause.toString()}"
+                )
             }
         CoroutineScope(Dispatchers.IO).launch(exception) {
-            notificationServiceInterface.updateNotificationConfig(
+            val result = notificationServiceInterface.updateNotificationConfig(
                 userId,
                 vehicleId,
                 null,
                 notificationConfigDataList,
-            ) {
+            )
+            if (result.status.requestStatus) {
                 Log.d(
                     "NOTIFICATION_SUBSCRIPTION API",
-                    "Notification subscription api success for $vehicleId"
+                    "Notification subscription api response for $vehicleId -> ${result.response}"
                 )
             }
         }

@@ -29,11 +29,10 @@ import org.eclipse.ecsp.R
 import org.eclipse.ecsp.helper.AppConstants.EXTRA_ALERT
 import org.eclipse.ecsp.helper.AppConstants.EXTRA_MESSAGE
 import org.eclipse.ecsp.helper.AppConstants.EXTRA_VEHICLE_ID
+import org.eclipse.ecsp.notificationservice.model.AlertData
 import org.eclipse.ecsp.ui.theme.LightBlue
 import org.eclipse.ecsp.ui.view.activities.DashboardActivity
 import org.eclipse.ecsp.ui.view.activities.LoginActivity
-import org.eclipse.ecsp.helper.AppManager
-import org.eclipse.ecsp.notificationservice.model.AlertData
 
 /**
  * Represents the notification service listener, using firebase messaging service.
@@ -52,7 +51,15 @@ class FcmNotificationService : FirebaseMessagingService() {
      */
     override fun onMessageReceived(message: RemoteMessage) {
         if (message.data.isNotEmpty()) {
-            Log.d("FCM_SERVICE", message.data.toString())
+            val data = message.data
+            Log.d("FCM_SERVICE", data.toString())
+            val body: String = data["body"].toString()
+            val chanelId =
+                if (data.keys.contains("channelIdentifier"))
+                    data["channelIdentifier"]  ?: ""
+                else
+                    ""
+            showNotification(chanelId, body, )
         }
     }
 
@@ -72,11 +79,11 @@ class FcmNotificationService : FirebaseMessagingService() {
     private fun showNotification(
         channelId: String,
         message: String,
-        vehicleId: String,
-        alert: AlertData,
+//        vehicleId: String,
+//        alert: AlertData
     ) {
         val notificationId = (System.currentTimeMillis() and 0xfffffffL).toInt()
-        val intent = getPendingIntent(message, alert, vehicleId)
+        val intent = getPendingIntent(message)
         val pendingIntent =
             PendingIntent.getActivity(
                 this,
@@ -134,8 +141,8 @@ class FcmNotificationService : FirebaseMessagingService() {
      */
     private fun getPendingIntent(
         message: String,
-        alert: AlertData,
-        vehicleId: String,
+//        alert: AlertData,
+        vehicleId: String?=null
     ): Intent {
         val intent: Intent
         if (AppManager.isLoggedIn()) {
@@ -146,7 +153,7 @@ class FcmNotificationService : FirebaseMessagingService() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         intent.putExtra(EXTRA_MESSAGE, message)
-        intent.putExtra(EXTRA_ALERT, alert)
+//        intent.putExtra(EXTRA_ALERT, alert)
         intent.putExtra(EXTRA_VEHICLE_ID, vehicleId)
         intent.action = System.currentTimeMillis().toString()
         return intent
