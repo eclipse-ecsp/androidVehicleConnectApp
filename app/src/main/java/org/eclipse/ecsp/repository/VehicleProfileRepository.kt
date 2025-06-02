@@ -51,9 +51,7 @@ class VehicleProfileRepository {
                 Log.e("Device association list API: ", exception.cause.toString())
             }
         CoroutineScope(Dispatchers.IO).launch(exception) {
-            vehicleServiceInterface.updateVehicleProfile(deviceId, postVehicleAttributeData) {
-                data.postValue(it)
-            }
+            data.postValue(vehicleServiceInterface.updateVehicleProfile(deviceId, postVehicleAttributeData))
         }
         return data
     }
@@ -71,9 +69,7 @@ class VehicleProfileRepository {
                 Log.e("Device termination API: ", exception.cause.toString())
             }
         CoroutineScope(Dispatchers.IO).launch(exception) {
-            vehicleServiceInterface.terminateVehicle(terminateDeviceData) {
-                data.postValue(it)
-            }
+            data.postValue(vehicleServiceInterface.terminateVehicle(terminateDeviceData))
         }
         return data
     }

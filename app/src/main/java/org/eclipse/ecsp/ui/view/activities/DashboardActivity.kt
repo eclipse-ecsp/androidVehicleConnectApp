@@ -130,7 +130,7 @@ class DashboardActivity : BaseAppActivity() {
                     }
             }
         }
-//        askNotificationPermission()
+        askNotificationPermission()
     }
 
     override fun onResume() {
@@ -164,9 +164,9 @@ class DashboardActivity : BaseAppActivity() {
                     )
                 ))
             )
+            dashboardVM.fetchAssociateDeviceList()
             LaunchedEffect(Unit) {
-                dashboardVM.fetchAssociateDeviceList()
-                triggerDeviceAssociationListApi()
+                triggerDeviceAssociationListApi(userProfile?.mEmail ?: "")
             }
             dashboardVM.isSignOutClicked().observe(this@DashboardActivity) { isSignOut ->
                 if (isSignOut) {
@@ -276,14 +276,14 @@ class DashboardActivity : BaseAppActivity() {
         }
     }
 
-    private fun triggerDeviceAssociationListApi() {
-//        isProgressBarLoading.value = true
+    private fun triggerDeviceAssociationListApi(emailId: String) {
+        isProgressBarLoading.value = true
         dashboardVM.getAssociatedDeviceList().observe(this@DashboardActivity) {
-//            dashboardVM.subscribeNotificationConfig(emailId?:"", it)
+            dashboardVM.subscribeNotificationConfig(emailId, it)
             isProgressBarLoading.value = false
             it.let {
-                AppConstants.setVehicleList(this@DashboardActivity, Gson().toJson(it.second))
-                processVehicleList(it.second)
+                AppConstants.setVehicleList(this@DashboardActivity, Gson().toJson(it))
+                processVehicleList(it)
             }
         }
     }

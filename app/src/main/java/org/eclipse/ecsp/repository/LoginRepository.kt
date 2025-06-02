@@ -42,9 +42,8 @@ class LoginRepository {
                 Log.e("User Profile API: ", exception.cause.toString())
             }
         CoroutineScope(Dispatchers.IO).launch(exception) {
-            userServiceInterface.fetchUserProfile {
-                data.postValue(it)
-            }
+           data.postValue(userServiceInterface.fetchUserProfile())
+
         }
         return data
     }

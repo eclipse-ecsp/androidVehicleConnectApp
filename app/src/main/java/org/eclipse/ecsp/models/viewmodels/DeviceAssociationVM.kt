@@ -16,6 +16,7 @@ package org.eclipse.ecsp.models.viewmodels
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 import android.app.Activity
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -102,9 +103,7 @@ class DeviceAssociationVM(activity: Activity) : AndroidViewModel(activity.applic
         imeiString: String,
     ): MutableLiveData<CustomMessage<DeviceVerificationData>> {
         viewModelScope.launch {
-            vehicleServiceInterface.verifyDeviceImei(imeiString) {
-                _verifyDeviceIMEI.value = it
-            }
+            _verifyDeviceIMEI.postValue(vehicleServiceInterface.verifyDeviceImei(imeiString))
         }
         return _verifyDeviceIMEI
     }
@@ -120,10 +119,15 @@ class DeviceAssociationVM(activity: Activity) : AndroidViewModel(activity.applic
         vehicleServiceInterface: VehicleServiceInterface,
         serialString: String,
     ): MutableLiveData<CustomMessage<AssociatedDeviceInfo>> {
-        viewModelScope.launch {
-            vehicleServiceInterface.associateDevice(serialString) {
-                _associateDevice.value = it
+        try {
+            viewModelScope.launch {
+                val result = vehicleServiceInterface.associateDevice(serialString)
+                if(result.status.requestStatus){
+                    _associateDevice.value = result
+                }
             }
+        } catch (e: Exception){
+            Log.e("DEVICE_ASSOCIATION: ", e.cause.toString())
         }
         return _associateDevice
     }

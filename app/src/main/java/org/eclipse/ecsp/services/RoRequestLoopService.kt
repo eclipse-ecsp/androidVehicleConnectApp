@@ -1,4 +1,5 @@
 package org.eclipse.ecsp.services
+
 /********************************************************************************
  * Copyright (c) 2023-24 Harman International
  *
@@ -69,13 +70,15 @@ class RoRequestLoopService(
                 while (isActive) {
                     if (count <= 50) {
                         count += 1
-                        dashboardRepository.checkRoRequestStatus(userId, vehicleId, roRequestId)
-                            .observe(lifecycleOwner) { roEventHistoryResponse ->
-                                updateRemoteUI(
-                                    activity, roEventHistoryResponse, isProgressBarLoading,
-                                    lazyStaggeredGridList, notifyRoUpdate,
-                                )
-                            }
+                        val roEventHistoryResponse = dashboardRepository.checkRoRequestStatus(
+                            userId,
+                            vehicleId,
+                            roRequestId
+                        )
+                        updateRemoteUI(
+                            activity, roEventHistoryResponse, isProgressBarLoading,
+                            lazyStaggeredGridList, notifyRoUpdate,
+                        )
                         delay(10000)
                     } else {
                         cancelJob()
@@ -124,7 +127,10 @@ class RoRequestLoopService(
                             notifyRoUpdate.value = notifyRoUpdate.value + 1
                         }
                         cancelJob()
-                        toastError(activity, "${getEventType(response.roEvents.eventID)} Remote operation failed")
+                        toastError(
+                            activity,
+                            "${getEventType(response.roEvents.eventID)} Remote operation failed"
+                        )
                     } else {
                         Log.d("PENDING_STATE", "within 3 min")
                         var tempList = lazyStaggeredGridList?.value
@@ -149,7 +155,10 @@ class RoRequestLoopService(
                         notifyRoUpdate.value = notifyRoUpdate.value + 1
                     }
                     cancelJob()
-                    toastError(activity, "${getEventType(response.roEvents.eventID)} Remote operation failed")
+                    toastError(
+                        activity,
+                        "${getEventType(response.roEvents.eventID)} Remote operation failed"
+                    )
                 }
             }
         } else {
@@ -157,7 +166,7 @@ class RoRequestLoopService(
         }
     }
 
-    private fun getEventType(eventId: String?): String  {
+    private fun getEventType(eventId: String?): String {
         return when (eventId) {
             AppConstants.WINDOW_EVENT_ID -> WINDOWS
             AppConstants.LIGHTS_EVENT_ID -> LIGHT
