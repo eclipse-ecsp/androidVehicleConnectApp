@@ -1,16 +1,16 @@
 [
   {
-    "title": "Open Source",
+    "title": "OpenSource",
     "client_Id": "mobileapp-test",
-    "client_secret": "mobileapp123",
-    "base_url": "https://oss-api-gateway3.eks-ignite-qa.kqa.ignite.harman.com",
-    "profile_url": "https://oss-api-gateway3.eks-ignite-qa.kqa.ignite.harman.com",
-    "signin_url": "https://oss-uidam-authorization-server.eks-ignite-qa.kqa.ignite.harman.com",
-    "signup_url": "https://oss-uidam-authorization-server.eks-ignite-qa.kqa.ignite.harman.com",
-    "redirect_url": "ignite://igniteauthorization",
+    "client_secret": "qasecret123",
+    "base_url": "https://api-gateway3.poc.opensourceharman.com",
+    "profile_url": "https://api-gateway3.poc.opensourceharman.com",
+    "signin_url": "https://auth-server.poc.opensourceharman.com",
+    "signup_url": "https://signup.eks-ignite-sdp-prod.ignite.harman.com",
+    "redirect_url": "app://opensourceauthorization",
     "scopes": [
-      "SelfManage"
+      "SelfManage",
+      "ManageNotifications"
     ]
   }
-
 ]
